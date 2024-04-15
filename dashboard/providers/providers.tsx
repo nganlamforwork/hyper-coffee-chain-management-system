@@ -1,10 +1,16 @@
-'use client';
 import React from 'react';
 import { ModalProvider } from './modal-provider';
 import { ThemeProvider } from './theme-provider';
 import { Toaster } from '@/components/ui/sonner';
+import { SessionProvider } from 'next-auth/react';
+import { auth } from '@/auth';
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+export default async function Providers({
+	children,
+}: {
+	children: React.ReactNode;
+}) {
+	const session = await auth();
 	return (
 		<>
 			<ThemeProvider
@@ -13,9 +19,11 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 				enableSystem
 				disableTransitionOnChange
 			>
-				{children}
-				<Toaster richColors expand={true} />
-				<ModalProvider />
+				<SessionProvider session={session}>
+					{children}
+					<Toaster richColors expand={true} />
+					<ModalProvider />
+				</SessionProvider>
 			</ThemeProvider>
 		</>
 	);

@@ -7,13 +7,18 @@ export const navItems: NavItem[] = [
 		label: 'Dashboard',
 	},
 	{
+		href: '/dashboard/employee',
+		icon: 'employee',
+		label: 'Employee',
+	},
+	{
 		href: '/dashboard/delivery-partners',
 		icon: 'package',
 		label: 'Delivery Partners',
 	},
 	{
 		href: '/dashboard/customers',
-		icon: 'employee',
+		icon: 'user',
 		label: 'Customers',
 	},
 	{
