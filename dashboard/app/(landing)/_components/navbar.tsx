@@ -117,7 +117,7 @@ export const Navbar = () => {
 					<div className='hidden md:flex gap-4'>
 						<ModeToggle />
 						<Link
-							href='/login'
+							href='/auth/login'
 							className='bg-primary p-2 px-4 rounded-md hover:bg-primary/80 text-white'
 						>
 							Login

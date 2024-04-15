@@ -1,4 +1,5 @@
 'use client';
+
 import { CalendarDateRangePicker } from '@/components/analytics/date-range-picker';
 import { Overview } from '@/components/analytics/overview';
 import { RecentSales } from '@/components/analytics/recent-sales';
