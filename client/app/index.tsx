@@ -1,13 +1,15 @@
 import { Image, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
+import { router } from 'expo-router';
+import { ROUTES } from '@/constants/route';
 
 const OnboardingScreen = () => {
   return (
     <>
       <StatusBar translucent barStyle="light-content" />
-      
-      <View className="flex-1 flex-col bg-red-500">
+
+      <View className="flex-1 flex-col">
         <View className="h-3/5 bg-black">
           <Image
             source={require('../assets/images/onboard.png')}
@@ -31,7 +33,10 @@ const OnboardingScreen = () => {
               </Text>
             </View>
 
-            <TouchableOpacity className="w-full max-w-[65%] bg-[#967259] py-4 rounded-2xl">
+            <TouchableOpacity
+              className="w-full max-w-[65%] bg-[#967259] py-4 rounded-2xl"
+              onPress={() => router.replace(ROUTES.LOGIN)}
+            >
               <Text className="text-[16px] text-white text-center">
                 Get Started
               </Text>
