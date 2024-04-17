@@ -41,7 +41,10 @@ const login = () => {
       </View>
 
       <View className="w-full">
-        <TouchableOpacity className="w-full bg-[#967259] py-3 rounded-2xl mb-4">
+        <TouchableOpacity
+          className="w-full bg-[#967259] py-3 rounded-2xl mb-4"
+          onPress={() => router.navigate(ROUTES.HOME)}
+        >
           <Text className="text-[14px] text-white text-center">Log In</Text>
         </TouchableOpacity>
         <TouchableOpacity className="ml-auto">
