@@ -65,7 +65,9 @@ const home = () => {
           className="ml-6 mb-4 pl-1 py-1"
         >
           {[0, 1, 2, 3, 4].map((item) => (
-            <ProductCard />
+            <View className="mr-4">
+              <ProductCard />
+            </View>
           ))}
         </ScrollView>
         <TitleSection text="Popular Picks" className="mb-4" />
@@ -75,7 +77,9 @@ const home = () => {
           className="ml-6 mb-4 pl-1 py-1"
         >
           {[0, 1, 2, 3, 4].map((item) => (
-            <ProductCard />
+            <View className="mr-4">
+              <ProductCard />
+            </View>
           ))}
         </ScrollView>
         <TitleSection text="Hot Sales" className="mb-4" />
@@ -85,7 +89,9 @@ const home = () => {
           className="ml-6 mb-4 pl-1 py-1"
         >
           {[0, 1, 2, 3, 4].map((item) => (
-            <ProductCard />
+            <View className="mr-4">
+              <ProductCard />
+            </View>
           ))}
         </ScrollView>
         <TitleSection text="News And Events" className="mb-4" />

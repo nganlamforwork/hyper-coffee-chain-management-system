@@ -17,7 +17,10 @@ const MainBottomTab = () => {
         <TouchableOpacity>
           <Ionicons name="bag" size={24} color="white" />
         </TouchableOpacity>
-        <TouchableOpacity className="ml-9">
+        <TouchableOpacity
+          className="ml-9"
+          onPress={() => router.navigate(ROUTES.CATEGORIES)}
+        >
           <FontAwesome5 name="book-open" size={24} color="white" />
         </TouchableOpacity>
       </View>
