@@ -2,11 +2,13 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { FontAwesome6, Fontisto } from '@expo/vector-icons';
 
-const ProductCard = () => {
+interface ProductCardProps {}
+
+const ProductCard = ({}: ProductCardProps) => {
   return (
     <TouchableOpacity
       style={styles.container}
-      className="relative w-[160px] rounded-3xl p-4 mr-4"
+      className={`relative w-[160px] rounded-3xl p-4 bg-white`}
     >
       <Image
         src="https://www.starbucks.vn/media/iebnrg1m/hazelnut-macchiato_tcm89-24778_w1024_n.jpg"
@@ -29,11 +31,10 @@ export default ProductCard;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
     shadowColor: '#A9A9A9',
-    shadowOffset: { width: 0, height: 0 }, // Dịch chuyển 
-    shadowOpacity: 0.5, // Độ trong suốt 
-    shadowRadius: 2, // Bán kính blur 
+    shadowOffset: { width: 0, height: 0 }, // Dịch chuyển
+    shadowOpacity: 0.5, // Độ trong suốt
+    shadowRadius: 2, // Bán kính blur
     elevation: 1, // For Android
   },
 });
