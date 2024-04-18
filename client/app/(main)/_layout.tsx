@@ -1,7 +1,8 @@
-import { StatusBar, Text, View } from 'react-native';
+import { StatusBar } from 'react-native';
 import React from 'react';
 import { Slot } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import MainBottomTab from '@/components/MainBottomTab';
 
 const MainLayout = () => {
   return (
@@ -12,9 +13,7 @@ const MainLayout = () => {
         <Slot />
       </SafeAreaView>
 
-      <View style={{ height: 50, backgroundColor: 'red' }}>
-        <Text>Bottom View</Text>
-      </View>
+      <MainBottomTab />
     </>
   );
 };
