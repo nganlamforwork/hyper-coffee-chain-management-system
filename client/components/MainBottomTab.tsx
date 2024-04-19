@@ -14,7 +14,7 @@ const MainBottomTab = () => {
   return (
     <View className="relative bg-[#38220F] px-9 py-6 pb-10 flex-row justify-between items-center">
       <View className="flex-row">
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => router.navigate(ROUTES.CART)}>
           <Ionicons name="bag" size={24} color="white" />
         </TouchableOpacity>
         <TouchableOpacity
