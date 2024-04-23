@@ -1,17 +1,25 @@
 import {
+  FlatList,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-} from 'react-native';
-import React, { useState } from 'react';
-import { EvilIcons } from '@expo/vector-icons';
-import { categoriesData } from '@/constants/home';
-import ProductCard from '@/components/ProductCard';
+} from "react-native";
+import React, { useState } from "react";
+import { EvilIcons } from "@expo/vector-icons";
+import { categoriesData } from "@/constants/home";
+import ProductCard from "@/components/ProductCard";
 
 const categories = () => {
   const [activeCategory, setActiveCategory] = useState(1);
+  const renderItem = () => {
+    return (
+      <View style={styles.itemContainer}>
+        <ProductCard />
+      </View>
+    );
+  };
 
   return (
     <>
@@ -33,13 +41,13 @@ const categories = () => {
           <TouchableOpacity
             key={item.id}
             className={`justify-center items-center mr-2 px-4 py-2 rounded-full bg-[#ECE0D1] ${
-              activeCategory === item.id ? 'bg-[#967259]' : ''
+              activeCategory === item.id ? "bg-[#967259]" : ""
             }`}
             onPress={() => setActiveCategory(item.id)}
           >
             <Text
               className={`text-[14px] text-[#2F3036] ${
-                activeCategory === item.id ? 'text-[#E8E9F1]' : ''
+                activeCategory === item.id ? "text-[#E8E9F1]" : ""
               }`}
             >
               {item.content}
@@ -47,19 +55,27 @@ const categories = () => {
           </TouchableOpacity>
         ))}
       </ScrollView>
-      <ScrollView className="mx-10" showsVerticalScrollIndicator={false}>
-        <View className="flex-row justify-between flex-wrap">
-          {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-            <View className="mb-4">
-              <ProductCard />
-            </View>
-          ))}
-        </View>
-      </ScrollView>
+      <FlatList
+        numColumns={2}
+        columnWrapperStyle={{ gap: 16, padding: 8 }}
+        contentContainerStyle={styles.flatListContainer}
+        data={[...Array(9).keys()]}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()}
+        d
+      />
     </>
   );
 };
 
 export default categories;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  flatListContainer: {
+    paddingHorizontal: 8,
+    paddingBottom: 8,
+  },
+  itemContainer: {
+    flex: 1,
+  },
+});
