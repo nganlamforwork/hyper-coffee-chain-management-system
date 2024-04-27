@@ -19,8 +19,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Loader } from '@/components/global/loader';
 import { toast } from 'sonner';
-import { AuthSchema } from '@/schemas';
 import { login } from '@/server/actions/auth/login';
+import { AuthSchema } from '@/schemas/auth';
 
 const LoginPage = () => {
 	const router = useRouter();

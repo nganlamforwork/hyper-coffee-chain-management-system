@@ -1,10 +1,10 @@
 export type USER_ROLE = 'USER' | 'ADMIN' | 'STAFF' | 'SWITCH_BOARD_STAFF';
 
-export type Employee = {
-	id: string;
+export type User = {
+	id?: string;
 	name: string;
 	email: string;
-	image: string | null;
+	image?: string | null;
 	phone: string;
 	gender: string;
 	dateOfBirth: string;

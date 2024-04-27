@@ -1,4 +1,5 @@
 'use client';
+import CustomDialogTrigger from '@/components/global/custom-dialog-trigger';
 import { ConfirmModal } from '@/components/modals/confirm-modal';
 import { Button } from '@/components/ui/button';
 import {
@@ -8,28 +9,25 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { deleteAccountById } from '@/server/actions/users/queries';
-import { Employee } from '@/types/user';
+import { useDeleteAccount } from '@/server/actions/users/mutations';
+import { User } from '@/types/user';
 import { Edit, MoreHorizontal, Trash } from 'lucide-react';
-import { useState } from 'react';
+import { toast } from 'sonner';
+import { RoleSelection } from './role-selection';
 
 interface CellActionProps {
-	data: Employee;
+	data: User;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
-	const [loading, setLoading] = useState(false);
-
-	const onConfirm = async () => {};
-
+	const deleteAccount = useDeleteAccount();
 	const onDelete = async () => {
 		try {
-			setLoading(true);
-			await deleteAccountById(data.id);
-			console.log('Account deleted successfully');
-			setLoading(false);
+			await deleteAccount.mutateAsync(data.id!);
+			toast.success('Account deleted successfully');
 		} catch (error) {
 			console.error('Error deleting account:', error);
+			toast.error('Error deleting account:');
 		}
 	};
 
@@ -44,14 +42,21 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align='end'>
 					<DropdownMenuLabel>Actions</DropdownMenuLabel>
-
-					<DropdownMenuItem>
-						<Edit className='mr-2 h-4 w-4' /> Update
+					<DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+						<CustomDialogTrigger
+							header='Update User Role'
+							content={<RoleSelection account={data} />}
+							description='Change roles for different permission.'
+						>
+							<div className='flex transition-all hover:bg-muted items-center gap-2 w-full rounded-md'>
+								<Edit className='h-4 w-4' /> Update
+							</div>
+						</CustomDialogTrigger>
 					</DropdownMenuItem>
 					<ConfirmModal
 						header='Delete this account?'
 						description='This will delete this account completely'
-						disabled={loading}
+						disabled={deleteAccount.isPending}
 						onConfirm={onDelete}
 					>
 						<DropdownMenuItem onSelect={(e) => e.preventDefault()}>

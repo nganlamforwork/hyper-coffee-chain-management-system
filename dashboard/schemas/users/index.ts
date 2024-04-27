@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const AccountSchema = z.object({
+export const CreateAccountSchema = z.object({
 	name: z.string().describe('Name').min(1),
 	email: z.string().describe('Email').email({ message: 'Invalid Email' }),
 	password: z.string().describe('Password').min(1, 'Password is required'),
@@ -9,9 +9,4 @@ export const AccountSchema = z.object({
 	dateOfBirth: z.string().describe('Date of Birth'),
 	phone: z.string().describe('Phone').min(10),
 	address: z.string().describe('Address').min(1),
-});
-
-export const AuthSchema = z.object({
-	email: z.string().describe('Email').email({ message: 'Invalid Email' }),
-	password: z.string().describe('Password').min(1, 'Password is required'),
 });
