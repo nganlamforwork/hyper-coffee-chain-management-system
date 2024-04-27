@@ -1,24 +1,21 @@
 'use server';
 
 import * as z from 'zod';
-import bcrypt from 'bcryptjs';
-import { AuthFormSchema } from '@/schemas';
+import { AccountSchema } from '@/schemas';
 import { db } from '@/lib/db';
 import { getUserByEmail } from '@/server/data/user';
-import { generateVerificationToken } from '@/lib/tokens';
-import { sendVerificationEmail } from '@/lib/mail';
 
 export const createUserAccount = async (
-	values: z.infer<typeof AuthFormSchema>
+	values: z.infer<typeof AccountSchema>
 ) => {
-	const validateFields = AuthFormSchema.safeParse(values);
+	const validateFields = AccountSchema.safeParse(values);
 
 	if (!validateFields.success) {
 		return { error: 'Invalid fields!' };
 	}
 
-	const { email, password, name } = validateFields.data;
-	const hashedPassword = await bcrypt.hash(password, 10);
+	const { email, password, name, role, gender, dateOfBirth, phone, address } =
+		validateFields.data;
 
 	const existingUser = await getUserByEmail(email);
 
@@ -30,16 +27,32 @@ export const createUserAccount = async (
 		data: {
 			name,
 			email,
-			password: hashedPassword,
+			password,
+			role,
+			gender,
+			dateOfBirth,
+			phone,
+			address,
 		},
 	});
 
-	// TODO: Send verification token email
-	const verificationToken = await generateVerificationToken(email);
-	await sendVerificationEmail(
-		verificationToken.email,
-		verificationToken.token
-	);
+	return { success: 'All accounts created successful!' };
+};
 
-	return { success: 'Confirmation email sent!' };
+export const getAllAccounts = async () => {
+	return await db.user.findMany();
+};
+
+export const deleteAccountById = async (accId: string) => {
+	try {
+		await db.user.delete({
+			where: {
+				id: accId,
+			},
+		});
+		return { success: 'Account deleted successfully' };
+	} catch (error) {
+		console.error('Error deleting account:', error);
+		return { error: 'Failed to delete account' };
+	}
 };

@@ -2,16 +2,14 @@
 
 import * as z from 'zod';
 
-import { AuthFormSchema } from '@/schemas';
+import { AuthSchema } from '@/schemas';
 import { signIn } from '@/auth';
 import { DEFAULT_LOGIN_REDIRECT } from '@/route';
 import { AuthError } from 'next-auth';
 import { getUserByEmail } from '../../data/user';
-import { generateVerificationToken } from '@/lib/tokens';
-import { sendVerificationEmail } from '@/lib/mail';
 
-export const login = async (values: z.infer<typeof AuthFormSchema>) => {
-	const validatedFields = AuthFormSchema.safeParse(values);
+export const login = async (values: z.infer<typeof AuthSchema>) => {
+	const validatedFields = AuthSchema.safeParse(values);
 
 	if (!validatedFields.success) {
 		return { error: 'Invalid fields' };
@@ -23,20 +21,6 @@ export const login = async (values: z.infer<typeof AuthFormSchema>) => {
 	if (!existingUser || !existingUser.email) {
 		return { error: 'Email does not exist!' };
 	}
-
-	if (!existingUser.emailVerified) {
-		const verificationToken = await generateVerificationToken(
-			existingUser.email
-		);
-
-		await sendVerificationEmail(
-			verificationToken.email,
-			verificationToken.token
-		);
-
-		return { success: 'Confirmation email sent!' };
-	}
-
 	try {
 		await signIn('credentials', {
 			email,

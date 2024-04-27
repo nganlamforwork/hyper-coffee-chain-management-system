@@ -19,7 +19,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Loader } from '@/components/global/loader';
 import { toast } from 'sonner';
-import { AuthFormSchema } from '@/schemas';
+import { AuthSchema } from '@/schemas';
 import { login } from '@/server/actions/auth/login';
 
 const LoginPage = () => {
@@ -27,15 +27,15 @@ const LoginPage = () => {
 	const [submitError, setSubmitError] = useState<string | undefined>('');
 	const [isPending, startTransition] = useTransition();
 
-	const form = useForm<z.infer<typeof AuthFormSchema>>({
+	const form = useForm<z.infer<typeof AuthSchema>>({
 		mode: 'onChange',
-		resolver: zodResolver(AuthFormSchema),
+		resolver: zodResolver(AuthSchema),
 		defaultValues: { email: '', password: '' },
 	});
 
 	const isLoading = form.formState.isSubmitting;
 
-	const onSubmit: SubmitHandler<z.infer<typeof AuthFormSchema>> = async (
+	const onSubmit: SubmitHandler<z.infer<typeof AuthSchema>> = async (
 		values
 	) => {
 		startTransition(() => {

@@ -1,5 +1,5 @@
 'use client';
-import { AlertModal } from '@/components/modals/alert-modal';
+import { ConfirmModal } from '@/components/modals/confirm-modal';
 import { Button } from '@/components/ui/button';
 import {
 	DropdownMenu,
@@ -8,9 +8,9 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Employee } from './data';
+import { deleteAccountById } from '@/server/actions/users/queries';
+import { Employee } from '@/types/user';
 import { Edit, MoreHorizontal, Trash } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 interface CellActionProps {
@@ -19,19 +19,22 @@ interface CellActionProps {
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 	const [loading, setLoading] = useState(false);
-	const [open, setOpen] = useState(false);
-	const router = useRouter();
 
 	const onConfirm = async () => {};
 
+	const onDelete = async () => {
+		try {
+			setLoading(true);
+			await deleteAccountById(data.id);
+			console.log('Account deleted successfully');
+			setLoading(false);
+		} catch (error) {
+			console.error('Error deleting account:', error);
+		}
+	};
+
 	return (
 		<>
-			<AlertModal
-				isOpen={open}
-				onClose={() => setOpen(false)}
-				onConfirm={onConfirm}
-				loading={loading}
-			/>
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>
 					<Button variant='ghost' className='h-8 w-8 p-0'>
@@ -42,16 +45,19 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 				<DropdownMenuContent align='end'>
 					<DropdownMenuLabel>Actions</DropdownMenuLabel>
 
-					<DropdownMenuItem
-						onClick={() =>
-							router.push(`/dashboard/user/${data.id}`)
-						}
-					>
+					<DropdownMenuItem>
 						<Edit className='mr-2 h-4 w-4' /> Update
 					</DropdownMenuItem>
-					<DropdownMenuItem onClick={() => setOpen(true)}>
-						<Trash className='mr-2 h-4 w-4' /> Delete
-					</DropdownMenuItem>
+					<ConfirmModal
+						header='Delete this account?'
+						description='This will delete this account completely'
+						disabled={loading}
+						onConfirm={onDelete}
+					>
+						<DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+							<Trash className='mr-2 h-4 w-4' /> Delete
+						</DropdownMenuItem>
+					</ConfirmModal>
 				</DropdownMenuContent>
 			</DropdownMenu>
 		</>
