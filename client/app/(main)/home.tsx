@@ -1,3 +1,4 @@
+import { StyleSheet } from "react-native";
 import {
   Image,
   ScrollView,
@@ -5,12 +6,12 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from 'react-native';
-import React, { useState } from 'react';
-import { AntDesign, EvilIcons } from '@expo/vector-icons';
-import { categoriesData } from '@/constants/home';
-import ProductCard from '@/components/ProductCard';
-import { SafeAreaView } from 'react-native-safe-area-context';
+} from "react-native";
+import React, { useState } from "react";
+import { EvilIcons } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
+import { categoriesData } from "@/constants/home";
+import ProductCard from "@/components/ProductCard";
 
 const home = () => {
   const [activeCategory, setActiveCategory] = useState(1);
@@ -33,39 +34,39 @@ const home = () => {
         </View>
       </View>
 
-      <TitleSection text="Categories" className="mb-4" />
-      <ScrollView
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        className="ml-6 mb-4 min-h-[36px]"
-      >
-        {categoriesData.map((item) => (
-          <TouchableOpacity
-            key={item.id}
-            className={`justify-center items-center mr-2 px-4 py-2 rounded-full bg-[#ECE0D1] ${
-              activeCategory === item.id ? 'bg-[#967259]' : ''
-            }`}
-            onPress={() => setActiveCategory(item.id)}
-          >
-            <Text
-              className={`text-[14px] text-[#2F3036] ${
-                activeCategory === item.id ? 'text-[#E8E9F1]' : ''
-              }`}
-            >
-              {item.content}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
       <ScrollView showsVerticalScrollIndicator={false}>
+        <TitleSection text="Categories" className="mb-4" />
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          className="ml-6 mb-4 min-h-[36px]"
+        >
+          {categoriesData.map((item) => (
+            <TouchableOpacity
+              key={item.id}
+              className={`justify-center items-center mr-2 px-4 py-2 rounded-full bg-[#ECE0D1] ${
+                activeCategory === item.id ? "bg-[#967259]" : ""
+              }`}
+              onPress={() => setActiveCategory(item.id)}
+            >
+              <Text
+                className={`text-[14px] text-[#2F3036] ${
+                  activeCategory === item.id ? "text-[#E8E9F1]" : ""
+                }`}
+              >
+                {item.content}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
         <TitleSection text="New Arrivals" className="mb-4" />
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          className="ml-6 mb-4 pl-1 py-1"
+          className="ml-6 mb-4 pl-1 py-1 overflow-visible"
         >
           {[0, 1, 2, 3, 4].map((item) => (
-            <View className="mr-4">
+            <View className="mr-4" key={item}>
               <ProductCard />
             </View>
           ))}
@@ -74,7 +75,7 @@ const home = () => {
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          className="ml-6 mb-4 pl-1 py-1"
+          className="ml-6 mb-4 pl-1 py-1 overflow-visible"
         >
           {[0, 1, 2, 3, 4].map((item) => (
             <View className="mr-4">
@@ -86,7 +87,7 @@ const home = () => {
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          className="ml-6 mb-4 pl-1 py-1"
+          className="ml-6 mb-4 pl-1 py-1 overflow-visible"
         >
           {[0, 1, 2, 3, 4].map((item) => (
             <View className="mr-4">
@@ -98,7 +99,7 @@ const home = () => {
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          className="ml-6 mb-4 pl-1 py-1"
+          className="ml-6 mb-4 pl-1 py-1 overflow-visible"
         >
           {[0, 1, 2, 3, 4].map((item) => (
             <TouchableOpacity className="w-[160px] mr-4">
@@ -133,11 +134,18 @@ function TitleSection({
       {...props}
     >
       <Text className="text-[18px] font-bold">{text}</Text>
-      <TouchableOpacity>
-        <AntDesign name="rightcircleo" size={24} color="black" />
+      <TouchableOpacity style={styles.button}>
+        <Entypo name="chevron-small-right" size={24} color="black" />
       </TouchableOpacity>
     </View>
   );
 }
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: "rgba(150, 114, 89, 0.2)",
+    borderRadius: 999,
+    padding: 2,
+  },
+});
 
 export default home;
