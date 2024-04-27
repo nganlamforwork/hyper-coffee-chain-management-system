@@ -1,11 +1,22 @@
 'use client';
 
 import { Checkbox } from '@/components/ui/checkbox';
-import { Employee } from './data';
 import { ColumnDef } from '@tanstack/react-table';
 import { CellAction } from './cell-action';
+import { User } from '@/types/user';
+import { Badge } from '@/components/ui/badge';
 
-export const columns: ColumnDef<Employee>[] = [
+const roleToVariant = {
+	admin: 'admin',
+	staff: 'staff',
+	switch_board_staff: 'switch_board_staff',
+	default: 'default',
+	destructive: 'destructive',
+	outline: 'outline',
+	secondary: 'secondary',
+};
+
+export const columns: ColumnDef<User>[] = [
 	{
 		id: 'select',
 		header: ({ table }) => (
@@ -28,24 +39,39 @@ export const columns: ColumnDef<Employee>[] = [
 		enableHiding: false,
 	},
 	{
-		accessorKey: 'first_name',
+		accessorKey: 'name',
 		header: 'NAME',
 	},
 	{
-		accessorKey: 'country',
-		header: 'COUNTRY',
+		accessorKey: 'role',
+		header: 'ROLE',
+		cell: ({ renderValue, ...props }) => {
+			const value = renderValue() as string;
+			const role =
+				value.toLowerCase() as string as keyof typeof roleToVariant;
+			const variant = roleToVariant[role] as typeof role;
+			return <Badge variant={variant}>{value}</Badge>;
+		},
 	},
 	{
 		accessorKey: 'email',
 		header: 'EMAIL',
 	},
 	{
-		accessorKey: 'job',
-		header: 'COMPANY',
-	},
-	{
 		accessorKey: 'gender',
 		header: 'GENDER',
+	},
+	{
+		accessorKey: 'phone',
+		header: 'PHONE',
+	},
+	{
+		accessorKey: 'dateOfBirth',
+		header: 'DATE OF BIRTH',
+	},
+	{
+		accessorKey: 'address',
+		header: 'ADDRESS',
 	},
 	{
 		id: 'actions',

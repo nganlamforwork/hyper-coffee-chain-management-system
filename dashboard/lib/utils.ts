@@ -1,3 +1,4 @@
+import { USER_ROLE } from '@/types/user';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -14,4 +15,24 @@ export function generateToken() {
 	).join('');
 
 	return token;
+}
+
+export function parseCSV(csvContent: string) {
+	const rows = csvContent.trim().split('\n').slice(1); // Skip header row
+	return rows.map((row) => {
+		const [id, name, dateOfBirth, gender, email, phone, address] =
+			row.split(',');
+		const role: USER_ROLE = 'STAFF';
+		const randomPassword = generateToken();
+		return {
+			name,
+			email,
+			password: randomPassword,
+			role,
+			gender,
+			dateOfBirth,
+			phone,
+			address,
+		};
+	});
 }

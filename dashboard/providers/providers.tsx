@@ -1,16 +1,17 @@
+'use client';
+
 import React from 'react';
 import { ModalProvider } from './modal-provider';
 import { ThemeProvider } from './theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { SessionProvider } from 'next-auth/react';
-import { auth } from '@/auth';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-export default async function Providers({
-	children,
-}: {
-	children: React.ReactNode;
-}) {
-	const session = await auth();
+const queryClient = new QueryClient({
+	defaultOptions: { queries: { retry: 5, retryDelay: 1000 } },
+});
+
+export default function Providers({ children }: { children: React.ReactNode }) {
 	return (
 		<>
 			<ThemeProvider
@@ -19,11 +20,13 @@ export default async function Providers({
 				enableSystem
 				disableTransitionOnChange
 			>
-				<SessionProvider session={session}>
-					{children}
-					<Toaster richColors expand={true} />
-					<ModalProvider />
-				</SessionProvider>
+				<QueryClientProvider client={queryClient}>
+					<SessionProvider>
+						{children}
+						<Toaster richColors expand={true} />
+						<ModalProvider />
+					</SessionProvider>
+				</QueryClientProvider>
 			</ThemeProvider>
 		</>
 	);

@@ -1,91 +1,125 @@
+'use client';
+
 import { EmployeeTable } from '@/components/tables/employee-tables/employee-table';
-import { buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/global/heading';
 import { Separator } from '@/components/ui/separator';
-import { Employee } from '@/components/tables/employee-tables/data';
-import { cn } from '@/lib/utils';
 import { Plus, User2 } from 'lucide-react';
-import Link from 'next/link';
-import {
-	Breadcrumb,
-	BreadcrumbItem,
-	BreadcrumbLink,
-	BreadcrumbList,
-	BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
 import { columns } from '@/components/tables/employee-tables/column';
+import {
+	Dialog,
+	DialogTrigger,
+	DialogContent,
+	DialogClose,
+	DialogHeader,
+	DialogTitle,
+	DialogDescription,
+	DialogFooter,
+} from '@/components/ui/dialog';
+import { Loader } from '@/components/global/loader';
+import { useState } from 'react';
+import { Label } from '@/components/ui/label';
+import { MultiFileDropzone } from '@/components/global/multi-file-dropzone';
+import { parseCSV } from '@/lib/utils';
+import { toast } from 'sonner';
+import { useCurrentUser } from '@/hooks/use-current-user';
+import { useAccounts } from '@/server/actions/users/queries';
+import { useCreateAccount } from '@/server/actions/users/mutations';
 
-const breadcrumbItems = [
-	{ title: 'Dashboard', link: '/dashboard' },
-	{ title: 'Employee', link: '/dashboard/employee' },
-];
+export default function EmployeePage() {
+	const totalUsers = 1000;
+	const { data: accounts } = useAccounts();
+	const createAccount = useCreateAccount();
 
-type paramsProps = {
-	searchParams: {
-		[key: string]: string | string[] | undefined;
+	const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+
+	const handleCSVUpload = async (csvContent: string) => {
+		const usersData = parseCSV(csvContent);
+
+		for (const userData of usersData) {
+			try {
+				createAccount.mutate(userData);
+			} catch (error) {
+				toast.error('Oops! Something went wrong.');
+			}
+		}
+		toast.success('Create all accounts successfully!');
 	};
-};
+	const createAccounts = async () => {
+		if (!uploadedFile) {
+			console.error('No file uploaded');
+			return;
+		}
 
-export default async function EmployeePage({ searchParams }: paramsProps) {
-	const page = Number(searchParams.page) || 1;
-	const pageLimit = Number(searchParams.limit) || 10;
-	const country = searchParams.search || null;
-	const offset = (page - 1) * pageLimit;
+		const reader = new FileReader();
+		reader.onload = async function (event) {
+			if (event.target) {
+				const fileContent = event.target.result as string;
+				await handleCSVUpload(fileContent);
+			}
+		};
+		reader.readAsText(uploadedFile);
+	};
 
-	const res = await fetch(
-		`https://api.slingacademy.com/v1/sample-data/users?offset=${offset}&limit=${pageLimit}` +
-			(country ? `&search=${country}` : '')
-	);
-	const employeeRes = await res.json();
-	const totalUsers = employeeRes.total_users; //1000
-	const pageCount = Math.ceil(totalUsers / pageLimit);
-	const employee: Employee[] = employeeRes.users;
 	return (
-		<>
+		<Dialog>
 			<div className='flex-1 space-y-4  p-4 md:p-8 pt-6'>
-				{/* <BreadCrumb items={breadcrumbItems} /> */}
-				<Breadcrumb>
-					<BreadcrumbList>
-						{breadcrumbItems.map((item, index) => (
-							<>
-								<BreadcrumbItem key={item.link}>
-									<BreadcrumbLink href={item.link}>
-										{item.title}
-									</BreadcrumbLink>
-								</BreadcrumbItem>
-								{index !== breadcrumbItems.length - 1 && (
-									<BreadcrumbSeparator />
-								)}
-							</>
-						))}
-					</BreadcrumbList>
-				</Breadcrumb>
-
 				<div className='flex items-start justify-between'>
 					<Heading
 						title={`Employee (${totalUsers})`}
-						description='Manage employees (Server side table functionalities.)'
+						description='Manage all employees account in your company.'
 						icon={User2}
 					/>
-
-					<Link
-						href={'/dashboard/employee/new'}
-						className={cn(buttonVariants({ variant: 'default' }))}
-					>
-						<Plus className='mr-2 h-4 w-4' /> Add New
-					</Link>
+					<DialogTrigger asChild>
+						<Button>
+							<Plus className='mr-2 h-4 w-4' /> Add New
+						</Button>
+					</DialogTrigger>
+					<DialogContent className='sm:max-w-[680px]'>
+						<DialogHeader>
+							<DialogTitle>Create new accounts</DialogTitle>
+							<DialogDescription>
+								Put your csv here to start creating new accounts
+							</DialogDescription>
+						</DialogHeader>
+						<div className='grid w-full gap-3'>
+							<Label htmlFor='idea'>Your CSV file</Label>
+							<MultiFileDropzone
+								multiple={false}
+								dropzoneOptions={{
+									maxFiles: 1,
+									accept: {
+										'text/csv': ['.csv'],
+									},
+								}}
+								className='w-full p-6'
+								onFilesAdded={(files) =>
+									setUploadedFile(files[0])
+								}
+							/>
+						</div>
+						<DialogFooter className='sm:justify-end gap-3 md:gap-0'>
+							<Button
+								disabled={createAccount.isPending}
+								onClick={createAccounts}
+							>
+								{createAccount.isPending && (
+									<Loader className='h-4 w-4 mr-2' />
+								)}
+								Create
+							</Button>
+							<DialogClose asChild>
+								<Button type='button' variant='secondary'>
+									Close
+								</Button>
+							</DialogClose>
+						</DialogFooter>
+					</DialogContent>
 				</div>
 				<Separator />
 
-				<EmployeeTable
-					searchKey='country'
-					pageNo={page}
-					columns={columns}
-					totalUsers={totalUsers}
-					data={employee}
-					pageCount={pageCount}
-				/>
+				<EmployeeTable columns={columns} data={accounts || []} />
 			</div>
-		</>
+		</Dialog>
 	);
 }
