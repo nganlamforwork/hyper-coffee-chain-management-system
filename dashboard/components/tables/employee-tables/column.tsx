@@ -3,7 +3,7 @@
 import { Checkbox } from '@/components/ui/checkbox';
 import { ColumnDef } from '@tanstack/react-table';
 import { CellAction } from './cell-action';
-import { Employee } from '@/types/user';
+import { User } from '@/types/user';
 import { Badge } from '@/components/ui/badge';
 
 const roleToVariant = {
@@ -16,7 +16,7 @@ const roleToVariant = {
 	secondary: 'secondary',
 };
 
-export const columns: ColumnDef<Employee>[] = [
+export const columns: ColumnDef<User>[] = [
 	{
 		id: 'select',
 		header: ({ table }) => (

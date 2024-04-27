@@ -17,56 +17,33 @@ import {
 	DialogFooter,
 } from '@/components/ui/dialog';
 import { Loader } from '@/components/global/loader';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { MultiFileDropzone } from '@/components/global/multi-file-dropzone';
 import { parseCSV } from '@/lib/utils';
-import {
-	createUserAccount,
-	getAllAccounts,
-} from '@/server/actions/users/queries';
 import { toast } from 'sonner';
-import { Employee } from '@/types/user';
+import { useCurrentUser } from '@/hooks/use-current-user';
+import { useAccounts } from '@/server/actions/users/queries';
+import { useCreateAccount } from '@/server/actions/users/mutations';
 
 export default function EmployeePage() {
-	const [isLoading, setIsLoading] = useState(false);
-	const [employee, setEmployee] = useState<Employee[]>([]);
-	const totalUsers = employee ? employee.length : 0;
-	const fetchEmployeeData = async () => {
-		try {
-			setIsLoading(true);
-			const data = await getAllAccounts();
-			setEmployee(data);
-			setIsLoading(false);
-		} catch (error) {
-			console.error('Error fetching employee data:', error);
-			setIsLoading(false);
-		}
-	};
-	useEffect(() => {
-		fetchEmployeeData();
-	}, []);
+	const totalUsers = 1000;
+	const { data: accounts } = useAccounts();
+	const createAccount = useCreateAccount();
+
 	const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+
 	const handleCSVUpload = async (csvContent: string) => {
 		const usersData = parseCSV(csvContent);
 
-		setIsLoading(true);
 		for (const userData of usersData) {
 			try {
-				createUserAccount(userData).then((data) => {
-					if (data?.error) {
-						toast.error(data?.error);
-						setIsLoading(false);
-						return;
-					}
-				});
-				setIsLoading(false);
-				toast.success('Create all accounts successfully');
+				createAccount.mutate(userData);
 			} catch (error) {
-				console.error('Error creating accounts:', error);
-				setIsLoading(false);
+				toast.error('Oops! Something went wrong.');
 			}
 		}
+		toast.success('Create all accounts successfully!');
 	};
 	const createAccounts = async () => {
 		if (!uploadedFile) {
@@ -123,10 +100,10 @@ export default function EmployeePage() {
 						</div>
 						<DialogFooter className='sm:justify-end gap-3 md:gap-0'>
 							<Button
-								disabled={isLoading}
+								disabled={createAccount.isPending}
 								onClick={createAccounts}
 							>
-								{isLoading && (
+								{createAccount.isPending && (
 									<Loader className='h-4 w-4 mr-2' />
 								)}
 								Create
@@ -141,7 +118,7 @@ export default function EmployeePage() {
 				</div>
 				<Separator />
 
-				<EmployeeTable columns={columns} data={employee} />
+				<EmployeeTable columns={columns} data={accounts || []} />
 			</div>
 		</Dialog>
 	);

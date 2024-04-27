@@ -2,11 +2,11 @@
 
 import * as z from 'zod';
 
-import { AuthSchema } from '@/schemas';
 import { signIn } from '@/auth';
 import { DEFAULT_LOGIN_REDIRECT } from '@/route';
 import { AuthError } from 'next-auth';
 import { getUserByEmail } from '../../data/user';
+import { AuthSchema } from '@/schemas/auth';
 
 export const login = async (values: z.infer<typeof AuthSchema>) => {
 	const validatedFields = AuthSchema.safeParse(values);
