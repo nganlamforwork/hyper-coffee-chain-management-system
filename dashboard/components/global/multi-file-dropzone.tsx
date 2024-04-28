@@ -6,7 +6,6 @@ import { useDropzone, type DropzoneOptions } from 'react-dropzone';
 import { twMerge } from 'tailwind-merge';
 import { toast } from 'sonner';
 import { ConfirmModal } from '../modals/confirm-modal';
-import { useCurrentUser } from '@/hooks/use-current-user';
 
 const variants = {
 	base: 'relative rounded-md p-4 w-96 max-w-[calc(100vw-1rem)] flex justify-center items-center flex-col cursor-pointer border border-dashed border-gray-400 dark:border-gray-300 transition-colors duration-200 ease-in-out',
@@ -60,14 +59,12 @@ const MultiFileDropzone = ({
 		UploadedFileData[]
 	>([]);
 
-	const user = useCurrentUser();
-
 	if (dropzoneOptions?.maxFiles && uploadedFiles?.length) {
 		disabled = disabled ?? uploadedFiles.length >= dropzoneOptions.maxFiles;
 	}
 
 	const onDelete = async (fileId: string) => {
-		if (!user || !fileId || loading) return;
+		if (!fileId || loading) return;
 
 		// Set loading state to true
 		setLoading(true);
@@ -136,7 +133,6 @@ const MultiFileDropzone = ({
 
 	const uploadFile = async (selectedFile: File) => {
 		if (loading) return;
-		if (!user) return;
 
 		// Set loading state to true
 		setLoading(true);

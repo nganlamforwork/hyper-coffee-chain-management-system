@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import React, { useState, useTransition } from 'react';
+import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -13,19 +13,19 @@ import {
 	FormItem,
 	FormMessage,
 } from '@/components/ui/form';
-import Link from 'next/link';
 import { Logo } from '@/app/(landing)/_components/logo';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Loader } from '@/components/global/loader';
 import { toast } from 'sonner';
-import { login } from '@/server/actions/auth/login';
 import { AuthSchema } from '@/schemas/auth';
+import { axiosInstance } from '@/lib/api';
+import { useAuth } from '@/providers/auth-provider';
 
 const LoginPage = () => {
 	const router = useRouter();
 	const [submitError, setSubmitError] = useState<string | undefined>('');
-	const [isPending, startTransition] = useTransition();
+	const [pending, setPending] = useState(false);
 
 	const form = useForm<z.infer<typeof AuthSchema>>({
 		mode: 'onChange',
@@ -34,22 +34,27 @@ const LoginPage = () => {
 	});
 
 	const isLoading = form.formState.isSubmitting;
-
-	const onSubmit: SubmitHandler<z.infer<typeof AuthSchema>> = async (
-		values
-	) => {
-		startTransition(() => {
-			login(values).then((data) => {
-				if (data?.error) {
-					toast.error(data?.error);
-					form.reset();
-					setSubmitError(data?.error);
-					return;
-				}
-				toast.success('Login successfully!');
-				router.replace('/dashboard');
-			});
-		});
+	const { login } = useAuth();
+	const onSubmit: SubmitHandler<z.infer<typeof AuthSchema>> = async ({
+		email,
+		password,
+	}) => {
+		await login(email, password)
+		// setPending(true);
+		// try {
+		// 	const res = await axiosInstance.post('/admin/login', {
+		// 		email,
+		// 		password,
+		// 	});
+		// 	if (res.data) {
+		// 		setPending(false);
+		// 		toast.success('Login successfully!');
+		// 		router.push('/dashboard');
+		// 	}
+		// } catch (error) {
+		// 	setPending(false);
+		// 	toast.error('Something went wrong!');
+		// }
 	};
 
 	return (
@@ -66,7 +71,7 @@ const LoginPage = () => {
 					An all-In-One Collaboration and Productivity Platform
 				</FormDescription>
 				<FormField
-					disabled={isLoading || isPending}
+					disabled={isLoading || pending}
 					control={form.control}
 					name='email'
 					render={({ field }) => (
@@ -83,7 +88,7 @@ const LoginPage = () => {
 					)}
 				/>
 				<FormField
-					disabled={isLoading || isPending}
+					disabled={isLoading || pending}
 					control={form.control}
 					name='password'
 					render={({ field }) => (
@@ -104,23 +109,13 @@ const LoginPage = () => {
 					type='submit'
 					className='w-full p-6'
 					size='lg'
-					disabled={isLoading || isPending}
+					disabled={isLoading || pending}
 				>
-					{(isLoading || isPending) && (
+					{(isLoading || pending) && (
 						<Loader className='h-4 w-4 mr-2' />
 					)}
 					Login
 				</Button>
-				<div className='flex items-center gap-2'>
-					<span>Dont have an account?</span>
-					<Link
-						href='/auth/signup'
-						className='text-primary'
-						prefetch={false}
-					>
-						Sign Up
-					</Link>
-				</div>
 			</form>
 		</Form>
 	);

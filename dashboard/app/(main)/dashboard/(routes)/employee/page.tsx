@@ -22,14 +22,13 @@ import { Label } from '@/components/ui/label';
 import { MultiFileDropzone } from '@/components/global/multi-file-dropzone';
 import { parseCSV } from '@/lib/utils';
 import { toast } from 'sonner';
-import { useCurrentUser } from '@/hooks/use-current-user';
-import { useAccounts } from '@/server/actions/users/queries';
-import { useCreateAccount } from '@/server/actions/users/mutations';
+import { useAccounts } from '@/server/users/queries';
+import { useCreateAccount } from '@/server/users/mutations';
 
 export default function EmployeePage() {
-	const totalUsers = 1000;
 	const { data: accounts } = useAccounts();
 	const createAccount = useCreateAccount();
+	const totalUsers = accounts ? accounts.length : 0;
 
 	const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 

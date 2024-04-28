@@ -32,7 +32,7 @@ export const Logo = () => {
 		<Link className='flex items-center gap-2' href='/' passHref>
 			<Image src={logoSrc} height={40} width={40} alt={logoAlt} />
 			<p className={cn('font-semibold text-2xl', font.className)}>
-				zapyai.
+				HyperCoffee.
 			</p>
 		</Link>
 	);

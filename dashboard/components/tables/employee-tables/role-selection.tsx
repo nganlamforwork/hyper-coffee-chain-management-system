@@ -9,7 +9,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
-import { useUpdateAccount } from '@/server/actions/users/mutations';
+import { useUpdateEmployeeRole } from '@/server/users/mutations';
 import { USER_ROLE, User } from '@/types/user';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -20,7 +20,7 @@ interface RoleSelectionProps {
 
 export const RoleSelection = ({ account }: RoleSelectionProps) => {
 	const [newRole, setNewRole] = useState<string | undefined>(undefined);
-	const updateRole = useUpdateAccount();
+	const updateRole = useUpdateEmployeeRole();
 	const handleChangeRole = async () => {
 		try {
 			await updateRole.mutateAsync({
@@ -43,12 +43,10 @@ export const RoleSelection = ({ account }: RoleSelectionProps) => {
 					<SelectValue placeholder='Select a fruit' />
 				</SelectTrigger>
 				<SelectContent>
-					<SelectItem value='ADMIN'>ADMIN</SelectItem>
 					<SelectItem value='STAFF'>STAFF</SelectItem>
 					<SelectItem value='SWITCH_BOARD_STAFF'>
 						SWITCH_BOARD_STAFF
 					</SelectItem>
-					<SelectItem value='USER'>USER</SelectItem>
 				</SelectContent>
 			</Select>
 			<div className='self-end'>
