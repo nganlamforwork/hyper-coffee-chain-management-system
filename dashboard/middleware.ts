@@ -1,39 +1,20 @@
-import {
-	DEFAULT_LOGIN_REDIRECT,
-	apiAuthPrefix,
-	authRoutes,
-	publicRoutes,
-} from './route';
-import authConfig from './auth.config';
-import NextAuth from 'next-auth';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-const { auth } = NextAuth(authConfig);
+// This function can be marked `async` if using `await` inside
+export function middleware(req: NextRequest) {
+	const token = req.cookies.get('access_token')?.value;
+	const { pathname } = req.nextUrl;
 
-export default auth((req) => {
-	const { nextUrl } = req;
-	const isLoggedIn = !!req.auth;
-
-	const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
-	const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
-	const isAuthRoute = authRoutes.includes(nextUrl.pathname);
-
-	if (isApiAuthRoute) {
-		return null;
+	if (pathname.startsWith('/dashboard') && !token) {
+		return NextResponse.redirect(new URL('/auth/login', req.nextUrl));
 	}
 
-	if (isAuthRoute) {
-		if (isLoggedIn) {
-			return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-		}
-		return null;
-	}
+	// Continue with the original request if the user is logged in
+	return NextResponse.next();
+}
 
-	if (!isLoggedIn && !isPublicRoute) {
-		return Response.redirect(new URL('/auth/login', nextUrl));
-	}
-	return null;
-});
-
+// See "Matching Paths" below to learn more
 export const config = {
-	matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
+	matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/'],
 };

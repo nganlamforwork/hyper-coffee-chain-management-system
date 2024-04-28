@@ -9,13 +9,13 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useCurrentUser } from '@/hooks/use-current-user';
-import { logout } from '@/server/actions/auth/logout';
+import { useAuth } from '@/providers/auth-provider';
 
 const UserButton = () => {
-	const user = useCurrentUser();
-	const onClick = () => {
-		logout();
+	const { user, logout } = useAuth();
+
+	const onClick = async () => {
+		await logout();
 	};
 
 	return (

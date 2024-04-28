@@ -9,7 +9,7 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useDeleteAccount } from '@/server/actions/users/mutations';
+import { useDeleteAccount } from '@/server/users/mutations';
 import { User } from '@/types/user';
 import { Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { toast } from 'sonner';
@@ -44,7 +44,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 					<DropdownMenuLabel>Actions</DropdownMenuLabel>
 					<DropdownMenuItem onSelect={(e) => e.preventDefault()}>
 						<CustomDialogTrigger
-							header='Update User Role'
+							header='Update Employee Role'
 							content={<RoleSelection account={data} />}
 							description='Change roles for different permission.'
 						>
