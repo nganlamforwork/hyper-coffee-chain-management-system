@@ -1,8 +1,8 @@
-import { Image, StatusBar, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react';
-import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
-import { ROUTES } from '@/constants/route';
+import { Image, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import React from "react";
+import { LinearGradient } from "expo-linear-gradient";
+import { router, Link } from "expo-router";
+import { ROUTES } from "@/constants/route";
 
 const OnboardingScreen = () => {
   return (
@@ -12,14 +12,14 @@ const OnboardingScreen = () => {
       <View className="flex-1 flex-col">
         <View className="h-3/5 bg-black">
           <Image
-            source={require('../assets/images/onboard.png')}
+            source={require("../assets/images/onboard.png")}
             alt="Onboard"
           />
         </View>
 
         <LinearGradient
           className="flex-1"
-          colors={['#967259', '#38220F']}
+          colors={["#967259", "#38220F"]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
         >

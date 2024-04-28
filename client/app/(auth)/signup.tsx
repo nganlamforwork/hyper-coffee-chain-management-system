@@ -1,8 +1,8 @@
-import { Text, TextInput, TouchableOpacity, View } from 'react-native';
-import React from 'react';
-import { router } from 'expo-router';
-import { ROUTES } from '@/constants/route';
-import Checkbox from 'expo-checkbox';
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import React from "react";
+import { router } from "expo-router";
+import { ROUTES } from "@/constants/route";
+import Checkbox from "expo-checkbox";
 
 const signup = () => {
   return (
@@ -19,7 +19,7 @@ const signup = () => {
         </TouchableOpacity>
       </View>
 
-      <View className="w-full mb-[36px]">
+      <View className="w-full">
         <TextInput
           className="mb-4 px-3 py-4 rounded-xl border border-[#C5C6CC]"
           placeholder="Full name *"
@@ -41,7 +41,7 @@ const signup = () => {
       </View>
 
       <View className="w-full">
-        <TouchableOpacity className="w-full bg-[#967259] py-3 rounded-2xl mb-4">
+        <TouchableOpacity className="w-full bg-[#967259] py-3 rounded-2xl">
           <Text className="text-[14px] text-white text-center">Sign Up</Text>
         </TouchableOpacity>
       </View>

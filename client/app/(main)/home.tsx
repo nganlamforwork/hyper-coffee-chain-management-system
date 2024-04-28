@@ -12,6 +12,7 @@ import { EvilIcons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { categoriesData } from "@/constants/home";
 import ProductCard from "@/components/ProductCard";
+import { Link } from "expo-router";
 
 const home = () => {
   const [activeCategory, setActiveCategory] = useState(1);
@@ -67,7 +68,9 @@ const home = () => {
         >
           {[0, 1, 2, 3, 4].map((item) => (
             <View className="mr-4" key={item}>
-              <ProductCard />
+              <Link href={`/product/${item}/`}>
+                <ProductCard />
+              </Link>
             </View>
           ))}
         </ScrollView>
@@ -79,7 +82,9 @@ const home = () => {
         >
           {[0, 1, 2, 3, 4].map((item) => (
             <View className="mr-4">
-              <ProductCard />
+              <Link href={`/product/${item}/`}>
+                <ProductCard />
+              </Link>
             </View>
           ))}
         </ScrollView>
@@ -91,7 +96,9 @@ const home = () => {
         >
           {[0, 1, 2, 3, 4].map((item) => (
             <View className="mr-4">
-              <ProductCard />
+              <Link href={`/product/${item}/`}>
+                <ProductCard />
+              </Link>
             </View>
           ))}
         </ScrollView>
