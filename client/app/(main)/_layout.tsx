@@ -2,7 +2,6 @@ import { Platform, StatusBar, StyleSheet, View } from "react-native";
 import React from "react";
 import { Slot, Tabs } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import MainBottomTab from "@/components/MainBottomTab";
 import { FontAwesome } from "@expo/vector-icons";
 
 const MainLayout = () => {

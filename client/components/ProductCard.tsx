@@ -6,7 +6,7 @@ interface ProductCardProps {}
 
 const ProductCard = ({}: ProductCardProps) => {
   return (
-    <TouchableOpacity
+    <View
       style={styles.container}
       className={`relative min-w-[140px] rounded-3xl p-4 bg-white`}
     >
@@ -23,7 +23,7 @@ const ProductCard = ({}: ProductCardProps) => {
       <TouchableOpacity className="absolute bg-[#967259] p-4 rounded-tl-3xl rounded-br-3xl bottom-0 right-0">
         <FontAwesome6 name="plus" size={12} color="#E8E9F1" />
       </TouchableOpacity>
-    </TouchableOpacity>
+    </View>
   );
 };
 
