@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -17,15 +16,11 @@ import { Logo } from '@/app/(landing)/_components/logo';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Loader } from '@/components/global/loader';
-import { toast } from 'sonner';
 import { AuthSchema } from '@/schemas/auth';
-import { axiosInstance } from '@/lib/api';
 import { useAuth } from '@/providers/auth-provider';
 
 const LoginPage = () => {
-	const router = useRouter();
 	const [submitError, setSubmitError] = useState<string | undefined>('');
-	const [pending, setPending] = useState(false);
 
 	const form = useForm<z.infer<typeof AuthSchema>>({
 		mode: 'onChange',
@@ -39,22 +34,7 @@ const LoginPage = () => {
 		email,
 		password,
 	}) => {
-		await login(email, password)
-		// setPending(true);
-		// try {
-		// 	const res = await axiosInstance.post('/admin/login', {
-		// 		email,
-		// 		password,
-		// 	});
-		// 	if (res.data) {
-		// 		setPending(false);
-		// 		toast.success('Login successfully!');
-		// 		router.push('/dashboard');
-		// 	}
-		// } catch (error) {
-		// 	setPending(false);
-		// 	toast.error('Something went wrong!');
-		// }
+		await login(email, password);
 	};
 
 	return (
@@ -71,7 +51,7 @@ const LoginPage = () => {
 					An all-In-One Collaboration and Productivity Platform
 				</FormDescription>
 				<FormField
-					disabled={isLoading || pending}
+					disabled={isLoading}
 					control={form.control}
 					name='email'
 					render={({ field }) => (
@@ -88,7 +68,7 @@ const LoginPage = () => {
 					)}
 				/>
 				<FormField
-					disabled={isLoading || pending}
+					disabled={isLoading}
 					control={form.control}
 					name='password'
 					render={({ field }) => (
@@ -109,11 +89,9 @@ const LoginPage = () => {
 					type='submit'
 					className='w-full p-6'
 					size='lg'
-					disabled={isLoading || pending}
+					disabled={isLoading}
 				>
-					{(isLoading || pending) && (
-						<Loader className='h-4 w-4 mr-2' />
-					)}
+					{isLoading && <Loader className='h-4 w-4 mr-2' />}
 					Login
 				</Button>
 			</form>

@@ -5,6 +5,7 @@ export interface NavItem {
 	icon: keyof typeof Icons;
 	label: string;
 	description?: string;
+	permissions: string[];
 }
 
 export interface NavItemWithChildren extends NavItem {

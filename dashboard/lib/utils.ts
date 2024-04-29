@@ -23,11 +23,10 @@ export function parseCSV(csvContent: string) {
 		const [id, name, dateOfBirth, gender, email, phone, address] =
 			row.split(',');
 		const role: USER_ROLE = 'STAFF';
-		const randomPassword = generateToken();
 		return {
 			name,
 			email,
-			password: randomPassword,
+			password: '123456',
 			role,
 			gender,
 			dateOfBirth,
