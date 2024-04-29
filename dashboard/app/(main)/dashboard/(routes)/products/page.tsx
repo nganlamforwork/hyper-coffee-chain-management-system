@@ -15,10 +15,11 @@ import {
 import { ProductTable } from '@/components/tables/product-tables/product-table';
 import { columns } from '@/components/tables/product-tables/column';
 import CreateProductForm from './_components/create-product-form';
+import { useProducts } from '@/server/product/queries';
 
 const ProductsPage = () => {
-	const products: any = [];
-	const totalProducts = 10;
+	const { data: products } = useProducts();
+	const totalProducts = products ? products.length : 0;
 
 	return (
 		<div>
@@ -35,7 +36,7 @@ const ProductsPage = () => {
 								<Plus className='mr-2 h-4 w-4' /> Add Product
 							</Button>
 						</SheetTrigger>
-						<SheetContent className='sm:max-w-2xl'>
+						<SheetContent className='sm:max-w-2xl overflow-auto'>
 							<SheetHeader>
 								<SheetTitle>Create new product</SheetTitle>
 								<SheetDescription>

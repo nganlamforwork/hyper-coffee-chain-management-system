@@ -40,7 +40,7 @@ export const RoleSelection = ({ account }: RoleSelectionProps) => {
 				onValueChange={(value: string) => setNewRole(value)}
 			>
 				<SelectTrigger className='w-full'>
-					<SelectValue placeholder='Select a fruit' />
+					<SelectValue placeholder='Select a role' />
 				</SelectTrigger>
 				<SelectContent>
 					<SelectItem value='STAFF'>STAFF</SelectItem>

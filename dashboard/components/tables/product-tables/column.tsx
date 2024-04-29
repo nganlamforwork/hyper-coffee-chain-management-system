@@ -3,7 +3,8 @@
 import { Checkbox } from '@/components/ui/checkbox';
 import { ColumnDef } from '@tanstack/react-table';
 import { CellAction } from './cell-action';
-import { Product } from '@/types/product';
+import { Product, Promotion } from '@/types/product';
+import Image from 'next/image';
 
 export const columns: ColumnDef<Product>[] = [
 	{
@@ -30,6 +31,18 @@ export const columns: ColumnDef<Product>[] = [
 	{
 		accessorKey: 'imageUrl',
 		header: 'IMAGE',
+		cell: ({ renderValue, ...props }) => {
+			const value = renderValue() as string;
+			return (
+				<Image
+					src={value}
+					alt='productImage'
+					width={80}
+					height={80}
+					className='rounded-lg'
+				/>
+			);
+		},
 	},
 	{
 		accessorKey: 'name',
@@ -46,6 +59,35 @@ export const columns: ColumnDef<Product>[] = [
 	{
 		accessorKey: 'price',
 		header: 'PRICE',
+	},
+	{
+		accessorKey: 'promotion',
+		header: 'PROMOTION',
+		cell: ({ renderValue, ...props }) => {
+			const promotion = renderValue() as Promotion;
+			return (
+				<div className='bg-gray-100 p-4 rounded-md shadow-md'>
+					<div className='flex flex-col gap-2'>
+						<p>
+							<strong>Description:</strong>{' '}
+							{promotion.description}
+						</p>
+						<p>
+							<strong>Start Date:</strong>{' '}
+							{new Date(promotion.startDate).toLocaleDateString()}
+						</p>
+						<p>
+							<strong>End Date:</strong>{' '}
+							{new Date(promotion.endDate).toLocaleDateString()}
+						</p>
+						<p>
+							<strong>Promotion Rate:</strong>{' '}
+							{promotion.promotionRate}%
+						</p>
+					</div>
+				</div>
+			);
+		},
 	},
 	{
 		id: 'actions',

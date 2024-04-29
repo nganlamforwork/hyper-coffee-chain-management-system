@@ -1,12 +1,12 @@
 export type Product = {
-	id: string;
+	id?: string;
 	name: string;
 	description?: string;
-	price: number;
-	imageUrl?: string;
-	category?: Category;
+	price: string;
+	image: string | ArrayBuffer | null;
+	categoryId?: string;
 	extras?: Extras[];
-	promotion?: Promotion;
+	promotionId?: string;
 };
 
 export type Category = {
