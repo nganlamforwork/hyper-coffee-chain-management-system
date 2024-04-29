@@ -5,6 +5,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { CellAction } from './cell-action';
 import { Product, Promotion } from '@/types/product';
 import Image from 'next/image';
+import { format } from 'date-fns';
 
 export const columns: ColumnDef<Product>[] = [
 	{
@@ -65,20 +66,29 @@ export const columns: ColumnDef<Product>[] = [
 		header: 'PROMOTION',
 		cell: ({ renderValue, ...props }) => {
 			const promotion = renderValue() as Promotion;
-			return (
+			return promotion ? (
 				<div className='bg-gray-100 p-4 rounded-md shadow-md'>
 					<div className='flex flex-col gap-2'>
+						<p>
+							<strong>Name:</strong> {promotion.name}
+						</p>
 						<p>
 							<strong>Description:</strong>{' '}
 							{promotion.description}
 						</p>
 						<p>
 							<strong>Start Date:</strong>{' '}
-							{new Date(promotion.startDate).toLocaleDateString()}
+							{format(
+								new Date(promotion.startDate!),
+								'MMMM d, yyyy - HH:mm:ss'
+							)}
 						</p>
 						<p>
 							<strong>End Date:</strong>{' '}
-							{new Date(promotion.endDate).toLocaleDateString()}
+							{format(
+								new Date(promotion.endDate!),
+								'MMMM d, yyyy - HH:mm:ss'
+							)}
 						</p>
 						<p>
 							<strong>Promotion Rate:</strong>{' '}
@@ -86,6 +96,8 @@ export const columns: ColumnDef<Product>[] = [
 						</p>
 					</div>
 				</div>
+			) : (
+				<span>No promotion campaign is set for this product.</span>
 			);
 		},
 	},
