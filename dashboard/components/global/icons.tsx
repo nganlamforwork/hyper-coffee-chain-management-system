@@ -668,6 +668,8 @@ import {
 	SquareTerminal,
 	Package,
 	Tag,
+	Coffee,
+	List,
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
@@ -729,4 +731,6 @@ export const Icons: IconMap = {
 	terminal: SquareTerminal,
 	package: Package,
 	tag: Tag,
+	coffee: Coffee,
+	list: List,
 };

@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import { NavItem } from '@/types';
 import { Dispatch, SetStateAction } from 'react';
 import { Hint } from '@/components/global/hint';
+import { useAuth } from '@/providers/auth-provider';
 
 interface DashboardNavProps {
 	items: NavItem[];
@@ -20,13 +21,20 @@ export function DashboardNav({
 	isShowIconOnly,
 }: DashboardNavProps) {
 	const pathname = usePathname();
+	const { user } = useAuth();
 
 	if (!items?.length) {
 		return null;
 	}
+
+	// Filter items based on user's role permissions
+	const filteredItems = items.filter((item) =>
+		user && user.role ? item.permissions.includes(user.role) : true
+	);
+
 	return (
 		<nav className='relative'>
-			{items.map((item) => {
+			{filteredItems.map((item) => {
 				const Icon = Icons[item.icon || 'arrowRight'];
 				const isActive = item.href === pathname;
 				return (
