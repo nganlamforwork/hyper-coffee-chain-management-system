@@ -20,8 +20,7 @@ export function generateToken() {
 export function parseCSV(csvContent: string) {
 	const rows = csvContent.trim().split('\n').slice(1); // Skip header row
 	return rows.map((row) => {
-		const [id, name, dateOfBirth, gender, email, phone, address] =
-			row.split(',');
+		const [id, name, dateOfBirth, gender, email, phone] = row.split(',');
 		const role: USER_ROLE = 'STAFF';
 		return {
 			name,
@@ -31,7 +30,6 @@ export function parseCSV(csvContent: string) {
 			gender,
 			dateOfBirth,
 			phone,
-			address,
 		};
 	});
 }

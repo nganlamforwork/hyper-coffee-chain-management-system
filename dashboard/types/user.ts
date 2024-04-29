@@ -8,7 +8,6 @@ export type User = {
 	phone?: string;
 	gender?: string;
 	dateOfBirth?: string;
-	address?: string;
 	role: USER_ROLE;
 	createdAt?: string;
 	updatedAt?: string;

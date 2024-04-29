@@ -10,8 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { toast } from 'sonner';
-import { Category } from '@/types/product';
-import { useDeleteCategory } from '@/server/category/mutations';
+import { Promotion } from '@/types/product';
 import {
 	Sheet,
 	SheetContent,
@@ -20,17 +19,18 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from '@/components/ui/sheet';
-import CreateCategoryForm from '@/app/(main)/dashboard/(routes)/categories/_components/create-category-form';
+import CreatePromotionForm from '@/app/(main)/dashboard/(routes)/promotions/_components/create-promotion-form';
+import { useDeletePromotion } from '@/server/promotion/mutations';
 
 interface CellActionProps {
-	data: Category;
+	data: Promotion;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
-	const deleteCategory = useDeleteCategory();
+	const deletePromotion = useDeletePromotion();
 	const onDelete = async () => {
 		try {
-			deleteCategory.mutate(data.id!);
+			deletePromotion.mutate(data.id!);
 		} catch (error) {
 			console.error('Error deleting account:', error);
 			toast.error('Error deleting account:');
@@ -56,9 +56,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 						</SheetTrigger>
 					</DropdownMenuItem>
 					<ConfirmModal
-						header='Delete this account?'
-						description='This will delete this account completely'
-						disabled={deleteCategory.isPending}
+						header='Delete this promotion?'
+						description='This will delete this promotion completely'
+						disabled={deletePromotion.isPending}
 						onConfirm={onDelete}
 					>
 						<DropdownMenuItem onSelect={(e) => e.preventDefault()}>
@@ -69,12 +69,12 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 			</DropdownMenu>
 			<SheetContent className='sm:max-w-2xl'>
 				<SheetHeader>
-					<SheetTitle>Update category</SheetTitle>
+					<SheetTitle>Update promotion campaign</SheetTitle>
 					<SheetDescription>
 						Fill in all the information below.
 					</SheetDescription>
 				</SheetHeader>
-				<CreateCategoryForm update={true} category={data} />
+				<CreatePromotionForm update={true} promotion={data} />
 			</SheetContent>
 		</Sheet>
 	);

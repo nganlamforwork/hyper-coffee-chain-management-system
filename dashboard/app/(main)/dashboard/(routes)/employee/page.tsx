@@ -82,7 +82,7 @@ export default function EmployeePage() {
 							</DialogDescription>
 						</DialogHeader>
 						<div className='grid w-full gap-3'>
-							<Label htmlFor='idea'>Your CSV file</Label>
+							<Label htmlFor='file'>Your CSV file</Label>
 							<MultiFileDropzone
 								multiple={false}
 								dropzoneOptions={{

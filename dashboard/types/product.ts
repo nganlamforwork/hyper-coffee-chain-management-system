@@ -22,9 +22,11 @@ export type Extras = {
 };
 
 export type Promotion = {
-	id: string;
+	id?: string;
+	name: string;
 	description: string;
-	startDate: string;
-	endDate: string;
-	promotionRate: number;
+	startDate?: Date;
+	endDate?: Date;
+	promotionRate: string;
+	maxQuantity: string;
 };

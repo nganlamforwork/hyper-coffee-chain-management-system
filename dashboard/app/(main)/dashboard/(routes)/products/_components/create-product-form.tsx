@@ -22,10 +22,11 @@ import {
 	SelectValue,
 } from '@/components/ui/select';
 import { useCategories } from '@/server/category/queries';
-import { Category } from '@/types/product';
+import { Category, Promotion } from '@/types/product';
 import { SingleImageDropzone } from '@/components/global/single-image-dropzone';
 import { useCreateProduct } from '@/server/product/mutations';
 import { Loader } from '@/components/global/loader';
+import { usePromotions } from '@/server/promotion/queries';
 
 const formSchema = z.object({
 	name: z.string().min(2, {
@@ -40,6 +41,7 @@ const formSchema = z.object({
 const CreateProductForm = () => {
 	const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 	const { data: categories } = useCategories();
+	const { data: promotions } = usePromotions();
 	const createProduct = useCreateProduct();
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -153,6 +155,43 @@ const CreateProductForm = () => {
 															key={cate.id}
 														>
 															{cate.name}
+														</SelectItem>
+													)
+												)}
+										</SelectContent>
+									</Select>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name='promotionId'
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Promotion</FormLabel>
+								<FormControl>
+									<Select
+										onValueChange={field.onChange}
+										defaultValue={field.value}
+										value={field.value}
+									>
+										<SelectTrigger className='w-full'>
+											<SelectValue placeholder='Select a promotion campaign' />
+										</SelectTrigger>
+										<SelectContent>
+											{promotions &&
+												promotions.map(
+													(promotion: Promotion) => (
+														<SelectItem
+															value={
+																promotion.id ||
+																''
+															}
+															key={promotion.id}
+														>
+															{promotion.name}
 														</SelectItem>
 													)
 												)}

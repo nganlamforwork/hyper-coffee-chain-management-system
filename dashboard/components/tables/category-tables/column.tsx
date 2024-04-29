@@ -3,9 +3,9 @@
 import { Checkbox } from '@/components/ui/checkbox';
 import { ColumnDef } from '@tanstack/react-table';
 import { CellAction } from './cell-action';
-import { Product } from '@/types/product';
+import { Category } from '@/types/product';
 
-export const columns: ColumnDef<Product>[] = [
+export const columns: ColumnDef<Category>[] = [
 	{
 		id: 'select',
 		header: ({ table }) => (
