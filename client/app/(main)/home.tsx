@@ -13,14 +13,16 @@ import { Entypo } from "@expo/vector-icons";
 import { categoriesData } from "@/constants/home";
 import ProductCard from "@/components/ProductCard";
 import { Link } from "expo-router";
+import { useAuthStore } from "@/store/auth";
 
 const home = () => {
   const [activeCategory, setActiveCategory] = useState(1);
+  const { user } = useAuthStore();
 
   return (
     <>
       <View className="mx-6 mb-4">
-        <Text className="text-[14px] mb-2">Hi, Lam!</Text>
+        <Text className="text-[14px] mb-2">Hi, {user?.name}!</Text>
         <Text className="font-bold text-[16px] mb-4">
           What do you want today?
         </Text>
