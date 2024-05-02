@@ -3,6 +3,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -11,12 +12,21 @@ import { EvilIcons } from "@expo/vector-icons";
 import { categoriesData } from "@/constants/home";
 import ProductCard from "@/components/ProductCard";
 
+const ProductCardAddToCart = ({
+}: any) => {
+  ToastAndroid.showWithGravity(
+    'Coffee is Added to Cart',
+    ToastAndroid.SHORT,
+    ToastAndroid.CENTER,
+  );
+};
+
 const categories = () => {
   const [activeCategory, setActiveCategory] = useState(1);
   const renderItem = () => {
     return (
       <View style={styles.itemContainer}>
-        <ProductCard />
+        <ProductCard buttonPressHandler={ProductCardAddToCart}/>
       </View>
     );
   };
