@@ -670,6 +670,8 @@ import {
 	Tag,
 	Coffee,
 	List,
+	Menu,
+	Layers2,
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
@@ -732,5 +734,7 @@ export const Icons: IconMap = {
 	package: Package,
 	tag: Tag,
 	coffee: Coffee,
+	menu: Menu,
 	list: List,
+	layers2: Layers2,
 };

@@ -6,16 +6,6 @@ import { CellAction } from './cell-action';
 import { User } from '@/types/user';
 import { Badge } from '@/components/ui/badge';
 
-const roleToVariant = {
-	admin: 'admin',
-	staff: 'staff',
-	switch_board_staff: 'switch_board_staff',
-	default: 'default',
-	destructive: 'destructive',
-	outline: 'outline',
-	secondary: 'secondary',
-};
-
 export const columns: ColumnDef<User>[] = [
 	{
 		id: 'select',
@@ -47,6 +37,11 @@ export const columns: ColumnDef<User>[] = [
 		header: 'ROLE',
 		cell: ({ renderValue, ...props }) => {
 			const value = renderValue() as string;
+			const roleToVariant = {
+				admin: 'admin',
+				staff: 'staff',
+				switch_board_staff: 'switch_board_staff',
+			};
 			const role =
 				value.toLowerCase() as string as keyof typeof roleToVariant;
 			const variant = roleToVariant[role] as typeof role;
@@ -68,10 +63,6 @@ export const columns: ColumnDef<User>[] = [
 	{
 		accessorKey: 'dateOfBirth',
 		header: 'DATE OF BIRTH',
-	},
-	{
-		accessorKey: 'address',
-		header: 'ADDRESS',
 	},
 	{
 		id: 'actions',
