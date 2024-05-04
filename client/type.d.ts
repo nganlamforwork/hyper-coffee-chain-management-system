@@ -19,18 +19,47 @@ type OrderOption = {
 export type USER_ROLE = 'CUSTOMER' | 'ADMIN' | 'STAFF' | 'SWITCH_BOARD_STAFF';
 
 export type User = {
-	id?: string;
-	name: string;
-	email: string;
-	image?: string | null;
-	phone?: string;
-	gender?: string;
-	dateOfBirth?: string;
-	role: USER_ROLE;
-	createdAt?: string;
-	updatedAt?: string;
+  id?: string;
+  name: string;
+  email: string;
+  image?: string | null;
+  phone?: string;
+  gender?: string;
+  dateOfBirth?: string;
+  role: USER_ROLE;
+  createdAt?: string;
+  updatedAt?: string;
 };
 export interface IEmployeeAccountsRequest {
-	employees: User[];
-	success: boolean;
+  employees: User[];
+  success: boolean;
 }
+
+export type Product = {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  imageUrl: string;
+  extraGroups: ExtraGroups[];
+};
+
+export type ExtraGroups = {
+  id: string;
+  name: string;
+  extras: Extra[];
+};
+
+export type Extra = {
+  id: string;
+  name: string;
+  price: number;
+  status: 'out-of-stock' | 'in-stock';
+};
+
+export type Promotion = {
+  id: string;
+  name: string;
+  description: string;
+};

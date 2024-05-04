@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, ToastAndroid } from 'react-native';
 import {
   Image,
   ScrollView,

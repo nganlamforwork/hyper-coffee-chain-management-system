@@ -6,30 +6,30 @@ import {
   ToastAndroid,
   TouchableOpacity,
   View,
-} from "react-native";
-import React, { useState } from "react";
-import { EvilIcons } from "@expo/vector-icons";
-import { categoriesData } from "@/constants/home";
-import ProductCard from "@/components/ProductCard";
-
-const ProductCardAddToCart = ({
-}: any) => {
-  ToastAndroid.showWithGravity(
-    'Coffee is Added to Cart',
-    ToastAndroid.SHORT,
-    ToastAndroid.CENTER,
-  );
-};
+} from 'react-native';
+import React, { useState } from 'react';
+import { EvilIcons } from '@expo/vector-icons';
+import { categoriesData } from '@/constants/home';
+import ProductCard from '@/components/ProductCard';
+import { useQuery } from '@tanstack/react-query';
+import { axiosInstance } from '@/config/axios';
+import { Product } from '@/type';
 
 const categories = () => {
   const [activeCategory, setActiveCategory] = useState(1);
-  const renderItem = () => {
+  const renderItem = ({ item }: { item: Product }) => {
     return (
       <View style={styles.itemContainer}>
-        <ProductCard buttonPressHandler={ProductCardAddToCart}/>
+        <ProductCard product={item} />
       </View>
     );
   };
+
+  const { data: products } = useQuery({
+    queryKey: ['products'],
+    queryFn: () =>
+      axiosInstance.get('/get-products').then((res) => res.data.products),
+  });
 
   return (
     <>
@@ -41,7 +41,7 @@ const categories = () => {
         </TouchableOpacity>
       </View>
 
-      <Text className="text-[#666666] ml-6 mb-4">Select a category</Text>
+      <Text className="text-[#666666] ml-6 mb-4">Select a categoryyyy</Text>
       <ScrollView
         horizontal={true}
         showsHorizontalScrollIndicator={false}
@@ -51,13 +51,13 @@ const categories = () => {
           <TouchableOpacity
             key={item.id}
             className={`justify-center items-center mr-2 px-4 py-2 rounded-full bg-[#ECE0D1] ${
-              activeCategory === item.id ? "bg-[#967259]" : ""
+              activeCategory === item.id ? 'bg-[#967259]' : ''
             }`}
             onPress={() => setActiveCategory(item.id)}
           >
             <Text
               className={`text-[14px] text-[#2F3036] ${
-                activeCategory === item.id ? "text-[#E8E9F1]" : ""
+                activeCategory === item.id ? 'text-[#E8E9F1]' : ''
               }`}
             >
               {item.content}
@@ -69,10 +69,9 @@ const categories = () => {
         numColumns={2}
         columnWrapperStyle={{ gap: 16, padding: 8 }}
         contentContainerStyle={styles.flatListContainer}
-        data={[...Array(9).keys()]}
+        data={products}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
-        d
       />
     </>
   );
