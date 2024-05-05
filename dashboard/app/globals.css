@@ -104,7 +104,7 @@ B (255 */
     --background: 216 100% 98.04%;
     --foreground: 213.6 100% 4.9%;
 
-    --primary: 214.12 100% 50%;
+    --primary: 25 26% 47%;
     --primary-foreground: 0 0% 100%;
 
     --card: 216 100% 98.04%;
@@ -113,7 +113,7 @@ B (255 */
     --popover: 0 0% 100%;
     --popover-foreground: 213.6 100% 4.9%;
 
-    --secondary: 214.74 100% 92.55%;
+    --secondary: 33 42% 87%;
     --secondary-foreground: 216 100% 0.98%;
 
     --muted: 213.6 100% 95.1%;
@@ -130,6 +130,16 @@ B (255 */
     --ring: 214.12 100% 50%;
 
     --radius: 0.5rem;
+
+    --novel-highlight-default: #ffffff;
+    --novel-highlight-purple: #f6f3f8;
+    --novel-highlight-red: #fdebeb;
+    --novel-highlight-yellow: #fbf4a2;
+    --novel-highlight-blue: #c1ecf9;
+    --novel-highlight-green: #acf79f;
+    --novel-highlight-orange: #faebdd;
+    --novel-highlight-pink: #faf1f5;
+    --novel-highlight-gray: #f1f1ef;
   }
 
   .dark {
@@ -155,7 +165,7 @@ B (255 */
     --border: 220 50% 13.2%;
     --input: 220 50% 13.2%;
 
-    --primary: 220 100% 44%;
+    --primary: 25 26% 47%;
     --primary-foreground: 220 10% 97.2%;
 
     --secondary: 220 50% 13.2%;
