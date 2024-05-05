@@ -5,16 +5,8 @@ import { ColumnDef } from '@tanstack/react-table';
 import { CellAction } from './cell-action';
 import { User } from '@/types/user';
 import { Badge } from '@/components/ui/badge';
-
-const roleToVariant = {
-	admin: 'admin',
-	staff: 'staff',
-	switch_board_staff: 'switch_board_staff',
-	default: 'default',
-	destructive: 'destructive',
-	outline: 'outline',
-	secondary: 'secondary',
-};
+import { format } from 'date-fns';
+import { OrderDetails } from '@/types/product';
 
 export const columns: ColumnDef<User>[] = [
 	{
@@ -39,39 +31,67 @@ export const columns: ColumnDef<User>[] = [
 		enableHiding: false,
 	},
 	{
+		accessorKey: 'id',
+		header: 'ORDER ID',
+	},
+	{
+		accessorKey: 'createdAt',
+		header: 'CREATED',
+		cell: ({ renderValue, ...props }) => {
+			const value = renderValue() as string;
+			const formattedDate = format(
+				new Date(value),
+				'MMMM d, yyyy - HH:mm:ss'
+			);
+			return <span>{formattedDate}</span>;
+		},
+	},
+	{
 		accessorKey: 'name',
 		header: 'NAME',
 	},
 	{
-		accessorKey: 'role',
-		header: 'ROLE',
+		accessorKey: 'address',
+		header: 'ADDRESS',
+	},
+	{
+		accessorKey: 'items',
+		header: 'QUANTITY',
 		cell: ({ renderValue, ...props }) => {
-			const value = renderValue() as string;
-			const role =
-				value.toLowerCase() as string as keyof typeof roleToVariant;
-			const variant = roleToVariant[role] as typeof role;
-			return <Badge variant={variant}>{value}</Badge>;
+			const value = renderValue() as OrderDetails[];
+			return <span>{value.length}</span>;
 		},
 	},
 	{
-		accessorKey: 'email',
-		header: 'EMAIL',
+		accessorKey: 'total',
+		header: 'TOTAL BILL',
+		cell: ({ renderValue, ...props }) => {
+			const value = renderValue() as number;
+			return <span>${value.toFixed(2)}</span>;
+		},
 	},
 	{
-		accessorKey: 'gender',
-		header: 'GENDER',
+		accessorKey: 'paymentMethodId',
+		header: 'PAYMENT',
+		cell: ({ renderValue, ...props }) => {
+			const value = renderValue() as string;
+			const type = value ? 'Non-Cash' : 'Cash';
+			return <span>{type}</span>;
+		},
 	},
 	{
-		accessorKey: 'phone',
-		header: 'PHONE',
-	},
-	{
-		accessorKey: 'dateOfBirth',
-		header: 'DATE OF BIRTH',
-	},
-	{
-		accessorKey: 'address',
-		header: 'ADDRESS',
+		accessorKey: 'status',
+		header: 'STATUS',
+		cell: ({ renderValue, ...props }) => {
+			const value = renderValue() as string;
+			const statusToVariant = {
+				pending: 'admin',
+				ready: 'default',
+				done: 'staff',
+			} as any;
+			const variant = statusToVariant[value];
+			return <Badge variant={variant}>{value.toUpperCase()}</Badge>;
+		},
 	},
 	{
 		id: 'actions',

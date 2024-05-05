@@ -1,6 +1,5 @@
 'use client';
 import CustomDialogTrigger from '@/components/global/custom-dialog-trigger';
-import { ConfirmModal } from '@/components/modals/confirm-modal';
 import { Button } from '@/components/ui/button';
 import {
 	DropdownMenu,
@@ -9,28 +8,15 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useDeleteAccount } from '@/server/users/mutations';
-import { User } from '@/types/user';
-import { Edit, MoreHorizontal, Trash } from 'lucide-react';
-import { toast } from 'sonner';
-import { RoleSelection } from './role-selection';
+import { Edit, MoreHorizontal } from 'lucide-react';
+import { StatusSelection } from './status-selection';
+import { Order } from '@/types/product';
 
 interface CellActionProps {
-	data: User;
+	data: Order;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
-	const deleteAccount = useDeleteAccount();
-	const onDelete = async () => {
-		try {
-			await deleteAccount.mutateAsync(data.id!);
-			toast.success('Account deleted successfully');
-		} catch (error) {
-			console.error('Error deleting account:', error);
-			toast.error('Error deleting account:');
-		}
-	};
-
 	return (
 		<>
 			<DropdownMenu>
@@ -44,25 +30,15 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 					<DropdownMenuLabel>Actions</DropdownMenuLabel>
 					<DropdownMenuItem onSelect={(e) => e.preventDefault()}>
 						<CustomDialogTrigger
-							header='Update Employee Role'
-							content={<RoleSelection account={data} />}
-							description='Change roles for different permission.'
+							header='Update Order Status'
+							content={<StatusSelection order={data} />}
+							description='Update the order status for tracking purposes.'
 						>
 							<div className='flex transition-all hover:bg-muted items-center gap-2 w-full rounded-md'>
-								<Edit className='h-4 w-4' /> Update
+								<Edit className='h-4 w-4' /> Update Status
 							</div>
 						</CustomDialogTrigger>
 					</DropdownMenuItem>
-					<ConfirmModal
-						header='Delete this account?'
-						description='This will delete this account completely'
-						disabled={deleteAccount.isPending}
-						onConfirm={onDelete}
-					>
-						<DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-							<Trash className='mr-2 h-4 w-4' /> Delete
-						</DropdownMenuItem>
-					</ConfirmModal>
 				</DropdownMenuContent>
 			</DropdownMenu>
 		</>

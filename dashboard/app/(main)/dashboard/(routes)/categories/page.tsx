@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Heading } from '@/components/global/heading';
 import { Separator } from '@/components/ui/separator';
-import { Coffee, Plus } from 'lucide-react';
+import { Coffee, Layers2, Plus } from 'lucide-react';
 import {
 	Sheet,
 	SheetContent,
@@ -28,7 +28,7 @@ const CategoriesPage = () => {
 						<Heading
 							title={`Categories (${totalCategories})`}
 							description='Manage all categories.'
-							icon={Coffee}
+							icon={Layers2}
 						/>
 						<SheetTrigger asChild>
 							<Button>
