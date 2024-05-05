@@ -1,12 +1,12 @@
 import { axiosInstance } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
 
-export const usePromotions = () => {
+export const useExtraGroups = () => {
 	return useQuery({
-		queryKey: ['promotions'],
+		queryKey: ['extras'],
 		queryFn: () =>
 			axiosInstance
-				.get('/get-promotions')
-				.then((res) => res.data.promotions),
+				.get('/get-extra-groups')
+				.then((res) => res.data.extraGroups),
 	});
 };

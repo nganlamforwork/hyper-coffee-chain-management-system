@@ -6,7 +6,7 @@ export const useCategories = () => {
 		queryKey: ['categories'],
 		queryFn: () =>
 			axiosInstance
-				.get('/admin/get-categories')
+				.get('/get-categories')
 				.then((res) => res.data.categories),
 	});
 };

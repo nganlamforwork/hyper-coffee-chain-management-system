@@ -9,14 +9,14 @@ export const navItems: NavItem[] = [
 	},
 	{
 		href: '/dashboard/categories',
-		icon: 'list',
+		icon: 'layers2',
 		label: 'Categories',
 		permissions: ['ADMIN'],
 	},
 	{
-		href: '/dashboard/products',
-		icon: 'coffee',
-		label: 'Products',
+		href: '/dashboard/menu',
+		icon: 'menu',
+		label: 'Menu',
 		permissions: ['ADMIN'],
 	},
 	{
@@ -42,11 +42,5 @@ export const navItems: NavItem[] = [
 		icon: 'tag',
 		label: 'Promotions',
 		permissions: ['ADMIN'],
-	},
-	{
-		href: '/dashboard/settings',
-		icon: 'settings',
-		label: 'Settings',
-		permissions: ['ADMIN', 'STAFF', 'SWITCH_BOARD_STAFF'],
 	},
 ];
