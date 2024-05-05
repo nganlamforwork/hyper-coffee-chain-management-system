@@ -62,7 +62,12 @@ const LoginPage = () => {
                 <FormControl>
                   <div className="grid w-full max-w-sm items-center gap-3">
                     <Label htmlFor="email">Email *</Label>
-                    <Input type="email" id="email" placeholder="Email" />
+                    <Input
+                      type="email"
+                      id="email"
+                      placeholder="Email"
+                      {...field}
+                    />
                   </div>
                 </FormControl>
                 <FormMessage />
@@ -82,6 +87,7 @@ const LoginPage = () => {
                       type="password"
                       id="password"
                       placeholder="Password"
+                      {...field}
                     />
                   </div>
                 </FormControl>
@@ -89,27 +95,15 @@ const LoginPage = () => {
               </FormItem>
             )}
           />
-          <FormField
-            disabled={isLoading}
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="terms" />
-                    <label
-                      htmlFor="terms"
-                      className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      Sign me in automatically
-                    </label>
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="flex items-center space-x-2">
+            <Checkbox id="terms" />
+            <label
+              htmlFor="terms"
+              className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Sign me in automatically
+            </label>
+          </div>
           {submitError && <FormMessage>{submitError}</FormMessage>}
           <Button
             type="submit"

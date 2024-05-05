@@ -21,7 +21,7 @@ body {
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
+    --secondary: 33 42% 87%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
@@ -104,7 +104,7 @@ B (255 */
     --background: 216 100% 98.04%;
     --foreground: 213.6 100% 4.9%;
 
-    --primary: #967259;
+    --primary: 25 26% 47%;
     --primary-foreground: 0 0% 100%;
 
     --card: 216 100% 98.04%;
@@ -113,7 +113,7 @@ B (255 */
     --popover: 0 0% 100%;
     --popover-foreground: 213.6 100% 4.9%;
 
-    --secondary: 214.74 100% 92.55%;
+    --secondary: 33 42% 87%;
     --secondary-foreground: 216 100% 0.98%;
 
     --muted: 213.6 100% 95.1%;
@@ -165,7 +165,7 @@ B (255 */
     --border: 220 50% 13.2%;
     --input: 220 50% 13.2%;
 
-    --primary: 220 100% 44%;
+    --primary: 25 26% 47%;
     --primary-foreground: 220 10% 97.2%;
 
     --secondary: 220 50% 13.2%;
