@@ -60,6 +60,10 @@ export const columns: ColumnDef<Product>[] = [
 	{
 		accessorKey: 'price',
 		header: 'PRICE',
+		cell: ({ renderValue, ...props }) => {
+			const value = renderValue() as number;
+			return <p>${value.toFixed(2)}</p>;
+		},
 	},
 	{
 		accessorKey: 'promotion',
