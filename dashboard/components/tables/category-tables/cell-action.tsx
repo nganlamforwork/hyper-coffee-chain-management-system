@@ -38,44 +38,44 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   };
 
   return (
-    <Sheet>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem>
-            <SheetTrigger asChild>
-              <div className="flex transition-all hover:bg-muted items-center gap-2 w-full rounded-md">
-                <Edit className="h-4 w-4" /> Update
-              </div>
-            </SheetTrigger>
-          </DropdownMenuItem>
-          <ConfirmModal
-            header="Delete this account?"
-            description="This will delete this account completely"
-            disabled={deleteCategory.isPending}
-            onConfirm={onDelete}
-          >
-            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-              <Trash className="mr-2 h-4 w-4" /> Delete
-            </DropdownMenuItem>
-          </ConfirmModal>
-        </DropdownMenuContent>
-      </DropdownMenu>
-      <SheetContent className="sm:max-w-2xl">
-        <SheetHeader>
-          <SheetTitle>Update category</SheetTitle>
-          <SheetDescription>
-            Fill in all the information fields below.
-          </SheetDescription>
-        </SheetHeader>
-        <CreateCategoryForm update={true} category={data} />
-      </SheetContent>
-    </Sheet>
+		<Sheet>
+			<DropdownMenu>
+				<DropdownMenuTrigger asChild>
+					<Button variant='ghost' className='h-8 w-8 p-0'>
+						<span className='sr-only'>Open menu</span>
+						<MoreHorizontal className='h-4 w-4' />
+					</Button>
+				</DropdownMenuTrigger>
+				<DropdownMenuContent align='end'>
+					<DropdownMenuLabel>Actions</DropdownMenuLabel>
+					<DropdownMenuItem>
+						<SheetTrigger asChild>
+							<div className='flex transition-all hover:bg-muted items-center gap-2 w-full rounded-md'>
+								<Edit className='h-4 w-4' /> Update
+							</div>
+						</SheetTrigger>
+					</DropdownMenuItem>
+					<ConfirmModal
+						header='Delete this account?'
+						description='This will delete this account completely'
+						disabled={deleteCategory.isPending}
+						onConfirm={onDelete}
+					>
+						<DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+							<Trash className='mr-2 h-4 w-4' /> Delete
+						</DropdownMenuItem>
+					</ConfirmModal>
+				</DropdownMenuContent>
+			</DropdownMenu>
+			<SheetContent className='sm:max-w-2xl overflow-auto'>
+				<SheetHeader>
+					<SheetTitle>Update category</SheetTitle>
+					<SheetDescription>
+						Fill in all the information fields below.
+					</SheetDescription>
+				</SheetHeader>
+				<CreateCategoryForm update={true} category={data} />
+			</SheetContent>
+		</Sheet>
   );
 };

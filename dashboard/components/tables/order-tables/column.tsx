@@ -3,12 +3,11 @@
 import { Checkbox } from '@/components/ui/checkbox';
 import { ColumnDef } from '@tanstack/react-table';
 import { CellAction } from './cell-action';
-import { User } from '@/types/user';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
-import { OrderDetails } from '@/types/product';
+import { Order, OrderDetails, Promotion } from '@/types/product';
 
-export const columns: ColumnDef<User>[] = [
+export const columns: ColumnDef<Order>[] = [
 	{
 		id: 'select',
 		header: ({ table }) => (
@@ -60,6 +59,24 @@ export const columns: ColumnDef<User>[] = [
 		cell: ({ renderValue, ...props }) => {
 			const value = renderValue() as OrderDetails[];
 			return <span>{value.length}</span>;
+		},
+	},
+	{
+		accessorKey: 'promotion',
+		header: 'PROMOTION',
+		cell: ({ renderValue, ...props }) => {
+			const promotion = renderValue() as Promotion;
+			return promotion ? (
+				<div className='bg-gray-100 p-4 rounded-md shadow-md'>
+					<div className='flex flex-col gap-2'>
+						<p>
+							{promotion.name} - {promotion.promotionRate}% sale
+						</p>
+					</div>
+				</div>
+			) : (
+				<span>No promotion campaign is set for this product.</span>
+			);
 		},
 	},
 	{
