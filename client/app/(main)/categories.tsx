@@ -15,7 +15,7 @@ import { useQuery } from '@tanstack/react-query';
 import { axiosInstance } from '@/config/axios';
 import { Product } from '@/type';
 
-const categories = () => {
+const Categories = () => {
   const [activeCategory, setActiveCategory] = useState(1);
   const renderItem = ({ item }: { item: Product }) => {
     return (
@@ -77,7 +77,7 @@ const categories = () => {
   );
 };
 
-export default categories;
+export default Categories;
 
 const styles = StyleSheet.create({
   flatListContainer: {

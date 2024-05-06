@@ -3,7 +3,15 @@ import React, { useState } from 'react';
 import { Slot, Tabs } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FontAwesome } from '@expo/vector-icons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Cart from './cart';
+import Categories from './categories';
+import Favorites from './favorites';
+import Home from './home';
+import Me from './me';
+import PaymentScreen from './Payment/payment';
+
+const Tab = createBottomTabNavigator();
 
 const MainLayout = () => {
     const [isChecked, setIsChecked] = useState(false);
@@ -12,34 +20,36 @@ const MainLayout = () => {
         <>
             <StatusBar translucent barStyle="dark-content" />
 
-            <SafeAreaView edges={['top']} style={{ flex: 1, paddingTop: 8 }}>
-                <Tabs
+            <SafeAreaView edges={['top']} style={{ flex: 1, paddingTop: 0 }}>
+                <Tab.Navigator
                     screenOptions={{
                         tabBarStyle: styles.container,
                         tabBarActiveTintColor: 'white',
                         tabBarInactiveTintColor: 'gray',
                     }}
                 >
-                    {!isChecked && (
-                        <Tabs.Screen
-                            name="cart"
-                            // children={()=><Cart onCheckboxClick={setIsChecked} />}
-                            // component={Cart}
-                            options={{
-                                title: 'Cart',
-                                headerShown: false,
-                                tabBarIcon: ({ focused }) => (
-                                    <FontAwesome
-                                        name="shopping-cart"
-                                        size={20}
-                                        color={focused ? 'white' : 'gray'}
-                                    />
-                                ),
-                            }}
-                        />
-                    )}
-                    <Tabs.Screen
+                    <Tab.Screen
+                        name="cart"
+                        component={PaymentScreen}
+                        options={{
+                            title: 'Cart',
+                            tabBarStyle: { display: isChecked ? 'none' : 'flex' },
+                            headerShown: false,
+                            tabBarIcon: ({ focused }) => (
+                                <FontAwesome
+                                    name="shopping-cart"
+                                    size={20}
+                                    color={focused ? 'white' : 'gray'}
+                                />
+                            ),
+                        }}
+                    >
+                        {/* {(props) => <Cart {...props} onCheckboxClick={setIsChecked} />} */}
+                    </Tab.Screen>
+
+                    <Tab.Screen
                         name="categories"
+                        component={Categories}
                         options={{
                             title: 'Categories',
                             headerShown: false,
@@ -52,8 +62,9 @@ const MainLayout = () => {
                             ),
                         }}
                     />
-                    <Tabs.Screen
+                    <Tab.Screen
                         name="home"
+                        component={Home}
                         options={{
                             title: '',
                             headerShown: false,
@@ -64,8 +75,9 @@ const MainLayout = () => {
                             ),
                         }}
                     />
-                    <Tabs.Screen
+                    <Tab.Screen
                         name="favorites"
+                        component={Favorites}
                         options={{
                             title: 'Favorites',
                             headerShown: false,
@@ -78,8 +90,9 @@ const MainLayout = () => {
                             ),
                         }}
                     />
-                    <Tabs.Screen
+                    <Tab.Screen
                         name="me"
+                        component={Me}
                         options={{
                             title: 'Me',
                             headerShown: false,
@@ -92,7 +105,7 @@ const MainLayout = () => {
                             ),
                         }}
                     />
-                </Tabs>
+                </Tab.Navigator>
             </SafeAreaView>
         </>
     );

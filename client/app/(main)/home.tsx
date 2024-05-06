@@ -15,7 +15,9 @@ import ProductCard from "@/components/ProductCard";
 import { Link } from "expo-router";
 import { useAuthStore } from "@/store/auth";
 
-const home = () => {
+
+const Home = () => {
+    const [activeCategory, setActiveCategory] = useState(1);
   const [activeCategory, setActiveCategory] = useState(1);
   const { user } = useAuthStore();
 
@@ -150,4 +152,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default home;
+export default Home;
