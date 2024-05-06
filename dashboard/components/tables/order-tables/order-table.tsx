@@ -18,7 +18,6 @@ import {
 	TableRow,
 } from '@/components/ui/table';
 
-import { useRouter } from 'next/navigation';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 interface DataTableProps<TData, TValue> {
@@ -30,8 +29,6 @@ export function OrderTable<TData, TValue>({
 	columns,
 	data,
 }: DataTableProps<TData, TValue>) {
-	const router = useRouter();
-
 	const table = useReactTable({
 		data,
 		columns,

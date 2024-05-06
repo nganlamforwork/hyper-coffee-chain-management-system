@@ -6,7 +6,7 @@ export const usePromotions = () => {
 		queryKey: ['promotions'],
 		queryFn: () =>
 			axiosInstance
-				.get('/admin/get-promotions')
+				.get('/get-promotions')
 				.then((res) => res.data.promotions),
 	});
 };

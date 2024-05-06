@@ -1,5 +1,5 @@
 import { axiosInstance } from '@/lib/api';
-import { Category, Product } from '@/types/product';
+import { Product } from '@/types/product';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
@@ -18,11 +18,11 @@ export const useCreateProduct = () => {
 	});
 };
 
-export const useUpdateCategory = () => {
+export const useUpdateProduct = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: (updatedCategory: Category) =>
-			axiosInstance.put('/admin/update-category', updatedCategory),
+		mutationFn: (updatedProduct: Product) =>
+			axiosInstance.put('/admin/update-product', updatedProduct),
 		onError: (error) => {
 			toast.error('An error occurred: ' + error.message);
 		},
@@ -31,22 +31,22 @@ export const useUpdateCategory = () => {
 			await queryClient.invalidateQueries({
 				queryKey: ['products', { id: variables.id }],
 			});
-			toast.success('Update category successfully');
+			toast.success('Update product successfully');
 		},
 	});
 };
 
-export const useDeleteCategory = () => {
+export const useDeleteProduct = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: (cateId: string) =>
-			axiosInstance.delete(`/admin/delete-category/${cateId}`),
+		mutationFn: (prodId: string) =>
+			axiosInstance.delete(`/admin/delete-product/${prodId}`),
 		onError: (error) => {
 			toast.error('An error occurred: ' + error.message);
 		},
 		onSettled: async (_, error) => {
 			await queryClient.invalidateQueries({ queryKey: ['products'] });
-			toast.success('Category deleted successfully');
+			toast.success('Product deleted successfully');
 		},
 	});
 };

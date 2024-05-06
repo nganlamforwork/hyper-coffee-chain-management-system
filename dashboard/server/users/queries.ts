@@ -11,3 +11,13 @@ export const useAccounts = () => {
 				.then((res) => res.data.employees),
 	});
 };
+
+export const useStaffs = () => {
+	return useQuery({
+		queryKey: ['staffs'],
+		queryFn: () =>
+			axiosInstance
+				.get('/admin/get-staffs')
+				.then((res) => res.data.staffs),
+	});
+};

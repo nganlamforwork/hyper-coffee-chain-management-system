@@ -8,21 +8,29 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useDeleteAccount } from '@/server/users/mutations';
 import { Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { toast } from 'sonner';
 import { Product } from '@/types/product';
+import { useDeleteProduct } from '@/server/product/mutations';
+import {
+	Sheet,
+	SheetContent,
+	SheetDescription,
+	SheetHeader,
+	SheetTitle,
+	SheetTrigger,
+} from '@/components/ui/sheet';
+import CreateProductForm from '@/app/(main)/dashboard/(routes)/menu/_components/create-product-form';
 
 interface CellActionProps {
 	data: Product;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
-	const deleteAccount = useDeleteAccount();
+	const deleteProduct = useDeleteProduct();
 	const onDelete = async () => {
+		deleteProduct.mutateAsync(data.id!);
 		try {
-			await deleteAccount.mutateAsync(data.id!);
-			toast.success('Account deleted successfully');
 		} catch (error) {
 			console.error('Error deleting account:', error);
 			toast.error('Error deleting account:');
@@ -30,7 +38,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 	};
 
 	return (
-		<>
+		<Sheet>
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>
 					<Button variant='ghost' className='h-8 w-8 p-0'>
@@ -41,14 +49,16 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 				<DropdownMenuContent align='end'>
 					<DropdownMenuLabel>Actions</DropdownMenuLabel>
 					<DropdownMenuItem>
-						<div className='flex transition-all hover:bg-muted items-center gap-2 w-full rounded-md'>
-							<Edit className='h-4 w-4' /> Update
-						</div>
+						<SheetTrigger asChild>
+							<div className='flex transition-all hover:bg-muted items-center gap-2 w-full rounded-md'>
+								<Edit className='h-4 w-4' /> Update
+							</div>
+						</SheetTrigger>
 					</DropdownMenuItem>
 					<ConfirmModal
-						header='Delete this account?'
-						description='This will delete this account completely'
-						disabled={deleteAccount.isPending}
+						header='Delete this product?'
+						description='This will delete this product completely'
+						disabled={deleteProduct.isPending}
 						onConfirm={onDelete}
 					>
 						<DropdownMenuItem onSelect={(e) => e.preventDefault()}>
@@ -57,6 +67,15 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 					</ConfirmModal>
 				</DropdownMenuContent>
 			</DropdownMenu>
-		</>
+			<SheetContent className='sm:max-w-2xl overflow-auto'>
+				<SheetHeader>
+					<SheetTitle>Update product</SheetTitle>
+					<SheetDescription>
+						Fill in all the information fields below.
+					</SheetDescription>
+				</SheetHeader>
+				<CreateProductForm update={true} product={data} />
+			</SheetContent>
+		</Sheet>
 	);
 };
