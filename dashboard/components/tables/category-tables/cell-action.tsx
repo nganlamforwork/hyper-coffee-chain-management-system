@@ -1,43 +1,43 @@
-'use client';
-import { ConfirmModal } from '@/components/modals/confirm-modal';
-import { Button } from '@/components/ui/button';
+"use client";
+import { ConfirmModal } from "@/components/modals/confirm-modal";
+import { Button } from "@/components/ui/button";
 import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Edit, MoreHorizontal, Trash } from 'lucide-react';
-import { toast } from 'sonner';
-import { Category } from '@/types/product';
-import { useDeleteCategory } from '@/server/category/mutations';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Edit, MoreHorizontal, Trash } from "lucide-react";
+import { toast } from "sonner";
+import { Category } from "@/types/product";
+import { useDeleteCategory } from "@/server/category/mutations";
 import {
-	Sheet,
-	SheetContent,
-	SheetDescription,
-	SheetHeader,
-	SheetTitle,
-	SheetTrigger,
-} from '@/components/ui/sheet';
-import CreateCategoryForm from '@/app/(main)/dashboard/(routes)/categories/_components/create-category-form';
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import CreateCategoryForm from "@/app/(main)/dashboard/(routes)/menu/_components/create-category-form";
 
 interface CellActionProps {
-	data: Category;
+  data: Category;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
-	const deleteCategory = useDeleteCategory();
-	const onDelete = async () => {
-		try {
-			deleteCategory.mutate(data.id!);
-		} catch (error) {
-			console.error('Error deleting account:', error);
-			toast.error('Error deleting account:');
-		}
-	};
+  const deleteCategory = useDeleteCategory();
+  const onDelete = async () => {
+    try {
+      deleteCategory.mutate(data.id!);
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      toast.error("Error deleting account:");
+    }
+  };
 
-	return (
+  return (
 		<Sheet>
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>
@@ -67,15 +67,15 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 					</ConfirmModal>
 				</DropdownMenuContent>
 			</DropdownMenu>
-			<SheetContent className='sm:max-w-2xl'>
+			<SheetContent className='sm:max-w-2xl overflow-auto'>
 				<SheetHeader>
 					<SheetTitle>Update category</SheetTitle>
 					<SheetDescription>
-						Fill in all the information below.
+						Fill in all the information fields below.
 					</SheetDescription>
 				</SheetHeader>
 				<CreateCategoryForm update={true} category={data} />
 			</SheetContent>
 		</Sheet>
-	);
+  );
 };

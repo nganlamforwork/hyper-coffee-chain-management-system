@@ -1,25 +1,27 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, ToastAndroid } from 'react-native';
 import {
-    Image,
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
-    ToastAndroid,
-} from 'react-native';
-import React, { useState } from 'react';
-import { EvilIcons } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons';
-import { categoriesData } from '@/constants/home';
-import ProductCard from '@/components/ProductCard';
-import { Link } from 'expo-router';
+  Image,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import React, { useState } from "react";
+import { EvilIcons } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
+import { categoriesData } from "@/constants/home";
+import ProductCard from "@/components/ProductCard";
+import { Link } from "expo-router";
+import { useAuthStore } from "@/store/auth";
 
 
 const Home = () => {
     const [activeCategory, setActiveCategory] = useState(1);
+  const [activeCategory, setActiveCategory] = useState(1);
+  const { user } = useAuthStore();
 
-    const ProductCardAddToCart = ({}: any) => {
+  const ProductCardAddToCart = ({}: any) => {
         ToastAndroid.showWithGravity(
             'Coffee is Added to Cart',
             ToastAndroid.SHORT,
@@ -30,7 +32,7 @@ const Home = () => {
     return (
         <>
             <View className="mx-6 mb-4">
-                <Text className="text-[14px] mb-2">Hi, Lam!</Text>
+                <Text className="text-[14px] mb-2">Hi, {user?.name}!</Text>
                 <Text className="font-bold text-[16px] mb-4">What do you want today?</Text>
                 <View className="py-3 px-4 bg-[#ECE0D180] rounded-3xl flex-row">
                     <TouchableOpacity>
