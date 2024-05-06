@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
-const me = () => {
+const Me = () => {
   return (
     <>
       <View
@@ -122,7 +122,7 @@ const me = () => {
   );
 };
 
-export default me;
+export default Me;
 
 const styles = StyleSheet.create({
   sectionContainerStyle: {

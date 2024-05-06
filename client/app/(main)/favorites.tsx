@@ -2,7 +2,7 @@ import { FlatList, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import ProductCard from "@/components/ProductCard";
 
-const favorites = () => {
+const Favorites = () => {
   const [activeCategory, setActiveCategory] = useState(1);
   const renderItem = () => {
     return (
@@ -30,7 +30,7 @@ const favorites = () => {
   );
 };
 
-export default favorites;
+export default Favorites;
 
 const styles = StyleSheet.create({
   flatListContainer: {

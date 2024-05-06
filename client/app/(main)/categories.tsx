@@ -21,7 +21,7 @@ const ProductCardAddToCart = ({
   );
 };
 
-const categories = () => {
+const Categories = () => {
   const [activeCategory, setActiveCategory] = useState(1);
   const renderItem = () => {
     return (
@@ -78,7 +78,7 @@ const categories = () => {
   );
 };
 
-export default categories;
+export default Categories;
 
 const styles = StyleSheet.create({
   flatListContainer: {

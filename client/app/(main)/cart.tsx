@@ -4,8 +4,13 @@ import Checkbox from 'expo-checkbox';
 import OrderCard from '@/components/OrderCard';
 import PaymentFooter from '@/components/PaymentFooter';
 import { Animated } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-const cart = ({}) => {
+interface CartProps{
+    onCheckboxClick: (value: boolean) => void;
+}
+
+const Cart: React.FC<CartProps> = ({ onCheckboxClick, navigation, route }: any) => {
     const [coffeeData, setCoffeeData] = useState([
         { id: 1, isChecked: false },
         { id: 2, isChecked: false },
@@ -20,7 +25,13 @@ const cart = ({}) => {
 
     const [prevCheckedCount, setPrevCheckedCount] = useState(0);
 
-    const handleCheckboxClick = () => {};
+    const paymentButtonPressHandler = () => {
+        navigation.navigate('Payment');
+    }
+
+    const handleCheckboxClick = (value: boolean) => {
+        onCheckboxClick(value);
+    };
 
     const handleChange = (id: number, checked: boolean) => {
         setCoffeeData((prevState) =>
@@ -53,10 +64,12 @@ const cart = ({}) => {
     };
 
     useEffect(() => {
-        if (checkedCount === 1 && prevCheckedCount === 0) {
+        if (checkedCount >= 1) {
             footerAnim.setValue(0); // reset position
             startAnimation();
-            handleCheckboxClick();
+            handleCheckboxClick(true);
+        } else {
+            handleCheckboxClick(false);
         }
         setPrevCheckedCount(checkedCount);
     }, [checkedCount]);
@@ -124,7 +137,7 @@ const cart = ({}) => {
                     }}
                 >
                     <PaymentFooter
-                        buttonPressHandler={() => {}}
+                        buttonPressHandler={paymentButtonPressHandler}
                         buttonTitle="Pay"
                         price={{ price: '0', currency: '$' }}
                         quantity={4}
@@ -135,7 +148,7 @@ const cart = ({}) => {
     );
 };
 
-export default cart;
+export default Cart;
 
 const styles = StyleSheet.create({
     ContentContainer: {

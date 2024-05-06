@@ -16,7 +16,7 @@ import ProductCard from '@/components/ProductCard';
 import { Link } from 'expo-router';
 
 
-const home = () => {
+const Home = () => {
     const [activeCategory, setActiveCategory] = useState(1);
 
     const ProductCardAddToCart = ({}: any) => {
@@ -150,4 +150,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default home;
+export default Home;
