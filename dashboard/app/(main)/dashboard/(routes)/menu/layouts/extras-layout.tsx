@@ -29,7 +29,7 @@ const ExtrasLayout = () => {
             </SheetTrigger>
             <SheetContent className="sm:max-w-lg overflow-auto">
               <SheetHeader>
-                <SheetTitle>Create NEW EXTRA GROUP</SheetTitle>
+                <SheetTitle>CREATE NEW EXTRA GROUP</SheetTitle>
                 <SheetDescription>
                   Fill in all the information fields below.
                 </SheetDescription>
