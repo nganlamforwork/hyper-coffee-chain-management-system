@@ -22,6 +22,7 @@ export type ExtraGroup = {
   max: string;
   extras: Extra[];
   products?: Product[];
+  type: string;
 };
 
 export type Extra = {
