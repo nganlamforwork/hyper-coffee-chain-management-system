@@ -7,33 +7,45 @@ import { useRouter } from 'expo-router';
 import { ROUTES } from '@/constants/route';
 
 interface ProductCardProps {
-  product: Product;
+  product?: Product;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const router = useRouter();
 
+  const handleRenderProductName = (name?: string) => {
+    if (name) {
+      return product?.name?.length > 18
+        ? product?.name.substring(0, 16 - 3) + '...'
+        : product?.name;
+    } else return 'Double Espresso';
+  };
+
   return (
     <TouchableOpacity
       style={styles.container}
       className={`relative min-w-[140px] rounded-3xl p-4 bg-white`}
-      onPress={() =>
-        router.push({
-          pathname: `${ROUTES.PRODUCT}/${product?.id}`,
-          params: {productString: JSON.stringify(product)}
-        })
-      }
+      onPress={() => {
+        product &&
+          router.push({
+            pathname: `${ROUTES.PRODUCT}/${product?.id}`,
+            params: { productString: JSON.stringify(product) },
+          });
+      }}
     >
       <Image
-        src={product?.imageUrl}
+        src={
+          product?.imageUrl ||
+          'https://res.cloudinary.com/dckbae28z/image/upload/v1714978999/products/lypx6b9pn7nxjnwihrs5.webp'
+        }
         className="w-[62px] h-[62px] rounded-full mb-2"
       />
       <Text className="text-[16px] font-bold mb-2">
-        {product?.name.length > 18
-          ? product?.name.substring(0, 16 - 3) + '...'
-          : product?.name}
+        {handleRenderProductName(product?.name)}
       </Text>
-      <Text className="text-[14px] font-bold mb-2">${product?.price}</Text>
+      <Text className="text-[14px] font-bold mb-2">
+        ${product?.price || 2.53}
+      </Text>
       <View className="flex-row items-center">
         <Fontisto name="star" size={16} color="#FFE147" />
         <Text className="text-[10px] ml-1">{4.5}</Text>
