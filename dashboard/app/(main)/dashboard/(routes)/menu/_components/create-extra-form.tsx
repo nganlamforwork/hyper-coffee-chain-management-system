@@ -31,6 +31,7 @@ import {
 import { useProducts } from "@/server/product/queries";
 import { Category, ExtraGroup, Product } from "@/types/product";
 import Image from "next/image";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -38,6 +39,7 @@ const formSchema = z.object({
   }),
   min: z.string().default("1"),
   max: z.string(),
+  type: z.string().default("must"),
 });
 
 interface Extra {
@@ -58,6 +60,7 @@ const CreateExtraForm = ({ update, extraGroup }: CreateExtraGroupFormProps) => {
       name: extraGroup?.name ?? "",
       min: extraGroup?.min?.toString() ?? "1",
       max: extraGroup?.max?.toString() ?? "10",
+      type: extraGroup?.type ?? "must",
     },
   });
   const [extras, setExtras] = useState<Extra[]>([]);
@@ -211,7 +214,40 @@ const CreateExtraForm = ({ update, extraGroup }: CreateExtraGroupFormProps) => {
             <div className="w-full h-14 bg-gray-200 flex items-center px-4 font-bold">
               SELECTION RULES
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <FormField
+              control={form.control}
+              name="type"
+              render={({ field }) => (
+                <FormItem className="space-y-3">
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex flex-col space-y-1"
+                    >
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="must" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Your customer must select
+                        </FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="optional" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Optional for your customer to select
+                        </FormLabel>
+                      </FormItem>
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="grid grid-cols-2 gap-2 ">
               <div>
                 <FormField
                   control={form.control}
@@ -252,11 +288,23 @@ const CreateExtraForm = ({ update, extraGroup }: CreateExtraGroupFormProps) => {
                 />
               </div>
             </div>
-            <Alert variant="info">
+            <Alert
+              variant={
+                form.watch("type") === "optional" ? "info" : "destructive"
+              }
+            >
               <Info className="h-4 w-4" />
               <AlertTitle>Attention</AlertTitle>
               <AlertDescription>
-                Your customer can only choose 1 extra(s) when ordering.
+                {form.watch("type") === "optional"
+                  ? `Your customer can select ${form.watch(
+                      "min"
+                    )} to ${form.watch("max")} option(s), or none at all.`
+                  : `Your customer must select ${form.watch(
+                      "min"
+                    )} to ${form.watch(
+                      "max"
+                    )} option(s), none is not accepted.`}
               </AlertDescription>
             </Alert>
 
