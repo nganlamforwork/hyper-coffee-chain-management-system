@@ -1,5 +1,5 @@
 import { axiosInstance } from '@/lib/api';
-import { IEmployeeAccountsRequest, User } from '@/types/user';
+import { IEmployeeAccountsRequest } from '@/types/user';
 import { useQuery } from '@tanstack/react-query';
 
 export const useAccounts = () => {
