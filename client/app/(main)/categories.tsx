@@ -41,11 +41,11 @@ const Categories = () => {
         </TouchableOpacity>
       </View>
 
-      <Text className="text-[#666666] ml-6 mb-4">Select a categoryyyy</Text>
+      <Text className="text-[#666666] ml-6 mb-4">Select a category</Text>
       <ScrollView
         horizontal={true}
         showsHorizontalScrollIndicator={false}
-        className="ml-6 mb-6 min-h-[36px]"
+        className="ml-6 mb-6 max-h-[36px]"
       >
         {categoriesData.map((item) => (
           <TouchableOpacity
