@@ -4,13 +4,13 @@ import Checkbox from 'expo-checkbox';
 import OrderCard from '@/components/OrderCard';
 import PaymentFooter from '@/components/PaymentFooter';
 import { Animated } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
 
-interface CartProps{
-    onCheckboxClick: (value: boolean) => void;
+interface CartProps {
+    // onCheckboxClick: (value: boolean) => void;
+    navigation: any;
 }
 
-const Cart: React.FC<CartProps> = ({ onCheckboxClick, navigation, route }: any) => {
+const Cart: React.FC<CartProps> = ({ navigation }) => {
     const [coffeeData, setCoffeeData] = useState([
         { id: 1, isChecked: false },
         { id: 2, isChecked: false },
@@ -25,13 +25,13 @@ const Cart: React.FC<CartProps> = ({ onCheckboxClick, navigation, route }: any) 
 
     const [prevCheckedCount, setPrevCheckedCount] = useState(0);
 
-    const paymentButtonPressHandler = () => {
-        navigation.navigate('Payment');
-    }
+    const paymentButtonPressHandler = () => {};
 
-    const handleCheckboxClick = (value: boolean) => {
-        onCheckboxClick(value);
-    };
+    // const handleCheckboxClick = (value: boolean) => {
+    //     // onCheckboxClick(value);
+    //     // router.navigate(ROUTES.PAYMENT);
+    //     navigation.navigate('ShippingMethod');
+    // };
 
     const handleChange = (id: number, checked: boolean) => {
         setCoffeeData((prevState) =>
@@ -64,15 +64,15 @@ const Cart: React.FC<CartProps> = ({ onCheckboxClick, navigation, route }: any) 
     };
 
     useEffect(() => {
+        const checkedCount = coffeeData.filter((coffee) => coffee.isChecked).length;
+    
         if (checkedCount >= 1) {
             footerAnim.setValue(0); // reset position
             startAnimation();
-            handleCheckboxClick(true);
-        } else {
-            handleCheckboxClick(false);
         }
+    
         setPrevCheckedCount(checkedCount);
-    }, [checkedCount]);
+    }, [coffeeData]);
 
     return (
         <>
@@ -137,10 +137,10 @@ const Cart: React.FC<CartProps> = ({ onCheckboxClick, navigation, route }: any) 
                     }}
                 >
                     <PaymentFooter
-                        buttonPressHandler={paymentButtonPressHandler}
                         buttonTitle="Pay"
                         price={{ price: '0', currency: '$' }}
                         quantity={4}
+                        navigation={navigation}
                     />
                 </Animated.View>
             )}

@@ -8,19 +8,24 @@ interface PriceProps {
 
 interface PaymentFooterProps {
     price: PriceProps;
-    buttonPressHandler: any;
     buttonTitle: string;
     quantity: number;
+    navigation: any;
 }
 
 const PaymentFooter: React.FC<PaymentFooterProps> = ({
     price,
-    buttonPressHandler,
     buttonTitle,
     quantity,
+    navigation,
 }) => {
     return (
-        <TouchableOpacity style={styles.PriceFooter}>
+        <TouchableOpacity
+            style={styles.PriceFooter}
+            onPress={() => {
+                navigation.navigate('ShippingMethod');
+            }}
+        >
             <View style={styles.PriceContainer}>
                 <Text style={styles.Quantity}>{quantity} items</Text>
                 <Text style={styles.PriceText}>${price.price}</Text>
