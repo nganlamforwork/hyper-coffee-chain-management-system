@@ -1,6 +1,5 @@
 import PaymentHeader from '@/components/PaymentComponent/PaymentHeader';
-import Radio from '@/components/PaymentComponent/Radio';
-import { AntDesign, MaterialIcons } from '@expo/vector-icons';
+import RadioPayment from '@/components/PaymentComponent/RadioPayment';
 import React, { useState } from 'react';
 import {
     View,
@@ -11,75 +10,40 @@ import {
     ScrollView,
     TextInput,
 } from 'react-native';
-import { Dropdown } from 'react-native-element-dropdown';
-import StepIndicator from 'react-native-step-indicator';
-
-const labels = ['Shipping', 'Payment', 'Review'];
-const customStyles = {
-    stepIndicatorSize: 20,
-    currentStepIndicatorSize: 60,
-    separatorStrokeWidth: 2,
-    currentStepStrokeWidth: 1,
-    stepStrokeCurrentColor: '#b0a297',
-    stepStrokeWidth: 1,
-    stepStrokeFinishedColor: '#b0a297',
-    stepStrokeUnFinishedColor: '#aaaaaa',
-    separatorFinishedColor: '#b0a297',
-    separatorUnFinishedColor: '#aaaaaa',
-    stepIndicatorFinishedColor: '#b0a297',
-    stepIndicatorUnFinishedColor: '#694c35',
-    stepIndicatorCurrentColor: '#ffffff',
-    stepIndicatorLabelFontSize: 0,
-    currentStepIndicatorLabelFontSize: 0,
-    stepIndicatorLabelCurrentColor: 'transparent',
-    stepIndicatorLabelFinishedColor: 'transparent',
-    stepIndicatorLabelUnFinishedColor: 'transparent',
-    labelColor: '#999999',
-    labelSize: 13,
-    currentStepLabelColor: '#b0a297',
-};
 
 interface PaymentProps {
-    navigation: any; // replace 'any' with your navigation prop type
+    navigation: any;
 }
 
-const data = [
-    { label: 'Item 1', value: '1' },
-    { label: 'Item 2', value: '2' },
-    { label: 'Item 3', value: '3' },
-    { label: 'Item 4', value: '4' },
-    { label: 'Item 5', value: '5' },
-    { label: 'Item 6', value: '6' },
-    { label: 'Item 7', value: '7' },
-    { label: 'Item 8', value: '8' },
-];
 const options = [
     {
-        label: 'Standard Shipping',
-        value: 'standard',
-        description: 'Delivery in 5-7 business days',
-        price: 0.5,
+        label: 'VietQR',
+        value: 'vietqr',
+        image: require('../../../assets/images/vietqr.png'),
     },
     {
-        label: 'Express Shipping',
-        value: 'express',
-        description: 'Delivery in 2-3 business days',
-        price: 1,
+        label: 'ZaloPay',
+        value: 'zalopay',
+        image: require('../../../assets/images/zalo.png'),
     },
     {
-        label: 'Next Day Shipping',
-        value: 'next_day',
-        description: 'Delivery by tomorrow',
-        price: 0,
+        label: 'Momo',
+        value: 'momo',
+        image: require('../../../assets/images/momo.png'),
+    },
+    {
+        label: 'COD',
+        value: 'cod',
+        image: null,
     },
 ];
 
-const PaymentScreen: React.FC<PaymentProps> = ({ navigation }) => {
+const Payment: React.FC<PaymentProps> = ({navigation}) => {
     const [value, setValue] = useState<string | null>(null);
     const [isFocus, setIsFocus] = useState(false);
     const [ship, setShip] = useState<string | null>(options[0].value);
 
-    const [currentPosition, setCurrentPosition] = useState(0);
+    // const [currentPosition, setCurrentPosition] = useState(0);
 
     const renderLabel = () => {
         if (value || isFocus) {
@@ -90,10 +54,17 @@ const PaymentScreen: React.FC<PaymentProps> = ({ navigation }) => {
     return (
         <ScrollView>
             <View style={styles.container}>
-                <PaymentHeader state={0} />
+                <PaymentHeader state={1} />
             </View>
 
             <View style={styles.contentContainer}>
+                {/* <View
+                    style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
+                >
+                    <View style={{ width: 100, height: 1, backgroundColor: '#bdbdbd' }} />
+                    <Text style={{ color: '#BDBDBD' }}> or </Text>
+                    <View style={{ width: 100, height: 1, backgroundColor: '#bdbdbd' }} />
+                </View> */}
                 <View style={styles.contentComponent}>
                     <View
                         style={{
@@ -101,80 +72,9 @@ const PaymentScreen: React.FC<PaymentProps> = ({ navigation }) => {
                             alignItems: 'center',
                             justifyContent: 'space-between',
                         }}
-                    >
-                        <Text style={styles.title}>Address</Text>
-                        <TouchableOpacity onPress={() => {}}>
-                            <Text style={{ fontSize: 14, fontWeight: '700', color: '#967259' }}>
-                                Change
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.cardStyle}>
-                        <View style={{ borderRadius: 12, flexDirection: 'row', flexWrap: 'wrap' }}>
-                            <Text
-                                style={{
-                                    color: '#967259',
-                                    fontSize: 10,
-                                    backgroundColor: '#ECE0D1',
-                                    paddingHorizontal: 6,
-                                    paddingVertical: 8,
-                                    borderRadius: 12,
-                                }}
-                            >
-                                Default
-                            </Text>
-                        </View>
-                        <Text style={{ fontSize: 16, fontWeight: '700', marginTop: 12 }}>
-                            John Doe
-                        </Text>
-                        <Text style={{ fontSize: 14, marginTop: 4 }}>+1 123 456 7890</Text>
-                        <Text style={{ fontSize: 14, marginTop: 4 }}>1234 Main Street</Text>
-                    </View>
-                </View>
-                <View style={styles.contentComponent}>
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                        }}
-                    >
-                        <Text style={styles.title}>Branch</Text>
-                    </View>
-                    <View style={styles.cardStyle}>
-                        <Dropdown
-                            data={data}
-                            search
-                            maxHeight={300}
-                            labelField="label"
-                            valueField="value"
-                            placeholder={!isFocus ? 'Select item' : '...'}
-                            searchPlaceholder="Search..."
-                            value={value}
-                            onFocus={() => setIsFocus(true)}
-                            onBlur={() => setIsFocus(false)}
-                            onChange={(item) => {
-                                setValue(item.value);
-                                setIsFocus(false);
-                            }}
-                            renderLeftIcon={() => (
-                                <AntDesign color={isFocus ? 'blue' : 'black'} size={14} />
-                            )}
-                        />
-                    </View>
-                </View>
-                <View style={styles.contentComponent}>
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                        }}
-                    >
-                        <Text style={styles.title}>Shipping Method</Text>
-                    </View>
+                    ></View>
                     <View>
-                        <Radio
+                        <RadioPayment
                             options={options}
                             checkedValue={ship || ''}
                             onChange={setShip}
@@ -182,27 +82,8 @@ const PaymentScreen: React.FC<PaymentProps> = ({ navigation }) => {
                         />
                     </View>
                 </View>
-                <View style={styles.contentComponent}>
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                        }}
-                    >
-                        <Text style={styles.title}>Additional Notes</Text>
-                    </View>
-                    <View style={styles.cardStyle}>
-                        <TextInput
-                            multiline
-                            numberOfLines={4}
-                            placeholder="Add notes for shipper here"
-                            style={{ height: 100, borderColor: 'gray' }}
-                            textAlignVertical="top" // Add this line
-                        />
-                    </View>
-                </View>
-                <TouchableOpacity style={styles.buttonContinue}>
+
+                <TouchableOpacity style={styles.buttonContinue} onPress={()=>{navigation.navigate("Review")}}>
                     <Text
                         style={{
                             color: 'white',
@@ -219,7 +100,7 @@ const PaymentScreen: React.FC<PaymentProps> = ({ navigation }) => {
     );
 };
 
-export default PaymentScreen;
+export default Payment;
 
 const styles = StyleSheet.create({
     container: {},

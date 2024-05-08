@@ -17,7 +17,6 @@ import { useAuthStore } from "@/store/auth";
 
 
 const Home = () => {
-    const [activeCategory, setActiveCategory] = useState(1);
   const [activeCategory, setActiveCategory] = useState(1);
   const { user } = useAuthStore();
 

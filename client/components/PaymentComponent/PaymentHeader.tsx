@@ -27,7 +27,7 @@ const customStyles = {
     labelSize: 13,
     currentStepLabelColor: '#b0a297',
 };
-const labels = ['Shipping', 'Payment', 'Review'];
+const labels = ['Shipping Method', 'Payment', 'Review'];
 
 const getStepIndicatorIconConfig = ({ position, stepStatus }: any) => {
     const iconConfig: {
@@ -78,7 +78,7 @@ const PaymentHeader: React.FC<PaymentHeaderProps> = ({ state }) => {
         >
             <View style={{ alignItems: 'center' }}>
                 <Text style={{ fontSize: 18, color: 'white', fontWeight: '700' }}>
-                    Shipping Method
+                    {labels[currentPosition]}
                 </Text>
             </View>
             <StepIndicator

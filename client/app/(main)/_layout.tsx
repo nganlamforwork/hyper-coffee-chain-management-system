@@ -9,9 +9,14 @@ import Categories from './categories';
 import Favorites from './favorites';
 import Home from './home';
 import Me from './me';
-import PaymentScreen from './Payment/payment';
+import ShippingMethod from './Payment/shippingMethod';
+import Payment from './Payment/payment';
+import Review from './Payment/review';
+import { createStackNavigator } from '@react-navigation/stack';
 
 const Tab = createBottomTabNavigator();
+
+const CartStack = createStackNavigator();
 
 const MainLayout = () => {
     const [isChecked, setIsChecked] = useState(false);
@@ -30,7 +35,7 @@ const MainLayout = () => {
                 >
                     <Tab.Screen
                         name="cart"
-                        component={PaymentScreen}
+                        // component={MyCartStack}
                         options={{
                             title: 'Cart',
                             tabBarStyle: { display: isChecked ? 'none' : 'flex' },
@@ -44,7 +49,21 @@ const MainLayout = () => {
                             ),
                         }}
                     >
-                        {/* {(props) => <Cart {...props} onCheckboxClick={setIsChecked} />} */}
+                        {(props) => (
+                            <CartStack.Navigator
+                                screenOptions={{
+                                    headerShown: false,
+                                }}
+                            >
+                                <CartStack.Screen name="Cart" component={Cart} />
+                                <CartStack.Screen
+                                    name="ShippingMethod"
+                                    component={ShippingMethod}
+                                />
+                                <CartStack.Screen name="Payment" component={Payment} />
+                                <CartStack.Screen name="Review" component={Review} />
+                            </CartStack.Navigator>
+                        )}
                     </Tab.Screen>
 
                     <Tab.Screen
