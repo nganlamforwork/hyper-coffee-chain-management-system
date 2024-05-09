@@ -4,15 +4,18 @@ import { Slot, Tabs } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FontAwesome } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import Cart from './cart';
 import Categories from './categories';
 import Favorites from './favorites';
 import Home from './home';
 import Me from './me';
-import ShippingMethod from './Payment/shippingMethod';
-import Payment from './Payment/payment';
-import Review from './Payment/review';
-import { createStackNavigator } from '@react-navigation/stack';
+import ShippingMethod from './Order/shippingMethod';
+import Payment from './Order/payment';
+import Review from './Order/review';
+import SuccessOrder from './Order/successOrder';
+import Feedback from './Order/feedback';
+import Thank from './Order/thank';
 
 const Tab = createBottomTabNavigator();
 
@@ -35,7 +38,6 @@ const MainLayout = () => {
                 >
                     <Tab.Screen
                         name="cart"
-                        // component={MyCartStack}
                         options={{
                             title: 'Cart',
                             tabBarStyle: { display: isChecked ? 'none' : 'flex' },
@@ -62,6 +64,11 @@ const MainLayout = () => {
                                 />
                                 <CartStack.Screen name="Payment" component={Payment} />
                                 <CartStack.Screen name="Review" component={Review} />
+                                <CartStack.Screen name="SuccessOrder" component={SuccessOrder} />
+                                <CartStack.Screen name="Home" component={Home} />
+                                <CartStack.Screen name="Feedback" component={Feedback} />
+                                <CartStack.Screen name="Thank" component={Thank} />
+
                             </CartStack.Navigator>
                         )}
                     </Tab.Screen>
