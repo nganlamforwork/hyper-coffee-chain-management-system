@@ -17,16 +17,6 @@ interface ReviewProps {
     navigation: any; // replace 'any' with your navigation prop type
 }
 
-const data = [
-    { label: 'Item 1', value: '1' },
-    { label: 'Item 2', value: '2' },
-    { label: 'Item 3', value: '3' },
-    { label: 'Item 4', value: '4' },
-    { label: 'Item 5', value: '5' },
-    { label: 'Item 6', value: '6' },
-    { label: 'Item 7', value: '7' },
-    { label: 'Item 8', value: '8' },
-];
 const options = [
     {
         label: 'Standard Shipping',
@@ -48,7 +38,7 @@ const options = [
     },
 ];
 
-const Review: React.FC<ReviewProps> = ({}) => {
+const Review: React.FC<ReviewProps> = ({navigation}) => {
     const [value, setValue] = useState<string | null>(null);
     const [isFocus, setIsFocus] = useState(false);
     const [ship, setShip] = useState<string | null>(options[0].value);
@@ -197,7 +187,7 @@ const Review: React.FC<ReviewProps> = ({}) => {
                         </View>
                     </View>
                 </View>
-                <TouchableOpacity style={styles.buttonContinue}>
+                <TouchableOpacity style={styles.buttonContinue} onPress={()=>{navigation.navigate("SuccessOrder")}}>
                     <Text
                         style={{
                             color: 'white',
