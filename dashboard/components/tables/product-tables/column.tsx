@@ -85,7 +85,7 @@ export const columns: ColumnDef<Product>[] = [
               <strong>Start Date:</strong>{" "}
               {format(
                 new Date(promotion.startDate!),
-                "MMMM d, yyyy - HH:mm:ss"
+                "MMMM d, yyyy - HH:mm:ss",
               )}
             </p>
             <p>
