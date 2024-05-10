@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export const useBasicAnalytics = () => {
   return useQuery({
-    queryKey: ["analytics"],
+    queryKey: ["analytics-basic"],
     queryFn: () =>
       axiosInstance.get("/admin/analytics/basic").then((res) => res.data.basic),
   });
@@ -11,7 +11,7 @@ export const useBasicAnalytics = () => {
 
 export const useOverviewAnalytics = () => {
   return useQuery({
-    queryKey: ["analytics"],
+    queryKey: ["analytics-overview"],
     queryFn: () =>
       axiosInstance
         .get("/admin/analytics/overview")

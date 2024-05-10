@@ -17,9 +17,9 @@ import { useOrders } from "@/server/order/queries";
 
 const AdminDashboard = () => {
   const { data: orders } = useOrders();
-  const { data: basic } = useBasicAnalytics();
-  if (basic === undefined) {
-    return <Loader className="h-10 w-10" />;
+  const { data: basic, isLoading } = useBasicAnalytics();
+  if (basic === undefined || isLoading) {
+    return <Loader className="flex items-center justify-center h-10 w-10" />;
   }
   return (
     <ScrollArea>
@@ -62,7 +62,7 @@ const AdminDashboard = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">
-                    ${basic.totalRevenue?.toFixed(2)}
+                    ${basic.totalRevenue.toFixed(2) || 0}
                   </div>
                   <p className="text-xs text-muted-foreground">
                     +20.1% from last month
@@ -91,7 +91,7 @@ const AdminDashboard = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">
-                    {basic?.subscriptions}
+                    {basic.subscriptions || 0}
                   </div>
                   <p className="text-xs text-muted-foreground">
                     +180.1% from last month
@@ -116,7 +116,7 @@ const AdminDashboard = () => {
                   </svg>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">+{basic?.sales}</div>
+                  <div className="text-2xl font-bold">+{basic.sales || 0}</div>
                   <p className="text-xs text-muted-foreground">
                     +19% from last month
                   </p>
