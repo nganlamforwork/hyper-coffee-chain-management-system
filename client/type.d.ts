@@ -16,7 +16,7 @@ type OrderOption = {
   value: string;
 };
 
-export type USER_ROLE = 'CUSTOMER' | 'ADMIN' | 'STAFF' | 'SWITCH_BOARD_STAFF';
+export type USER_ROLE = "CUSTOMER" | "ADMIN" | "STAFF" | "SWITCH_BOARD_STAFF";
 
 export type User = {
   id?: string;
@@ -35,6 +35,10 @@ export interface IEmployeeAccountsRequest {
   success: boolean;
 }
 
+export type Category = {
+  id: string;
+  name: string;
+};
 export type Product = {
   id: string;
   name: string;
@@ -45,9 +49,13 @@ export type Product = {
   extraGroups: ExtraGroups[];
 };
 
+export type EXTRA_TYPE = "optional" | "must";
 export type ExtraGroups = {
   id: string;
   name: string;
+  type: EXTRA_TYPE;
+  min: number;
+  max: number;
   extras: Extra[];
 };
 
@@ -55,7 +63,7 @@ export type Extra = {
   id: string;
   name: string;
   price: number;
-  status: 'out-of-stock' | 'in-stock';
+  status: "out-of-stock" | "in-stock";
 };
 
 export type Promotion = {

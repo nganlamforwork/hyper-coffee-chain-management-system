@@ -1,10 +1,10 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React from "react";
 
-import { FontAwesome6, Fontisto } from '@expo/vector-icons';
-import { Product } from '@/type';
-import { useRouter } from 'expo-router';
-import { ROUTES } from '@/constants/route';
+import { FontAwesome6, Fontisto } from "@expo/vector-icons";
+import { Product } from "@/type";
+import { useRouter } from "expo-router";
+import { ROUTES } from "@/constants/route";
 
 interface ProductCardProps {
   product?: Product;
@@ -16,9 +16,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const handleRenderProductName = (name?: string) => {
     if (name) {
       return product?.name?.length > 18
-        ? product?.name.substring(0, 16 - 3) + '...'
+        ? product?.name.substring(0, 16 - 3) + "..."
         : product?.name;
-    } else return 'Double Espresso';
+    } else return "Double Espresso";
   };
 
   return (
@@ -29,14 +29,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         product &&
           router.push({
             pathname: `${ROUTES.PRODUCT}/${product?.id}`,
-            params: { productString: JSON.stringify(product) },
           });
       }}
     >
       <Image
         src={
           product?.imageUrl ||
-          'https://res.cloudinary.com/dckbae28z/image/upload/v1714978999/products/lypx6b9pn7nxjnwihrs5.webp'
+          "https://res.cloudinary.com/dckbae28z/image/upload/v1714978999/products/lypx6b9pn7nxjnwihrs5.webp"
         }
         className="w-[62px] h-[62px] rounded-full mb-2"
       />
@@ -61,7 +60,7 @@ export default ProductCard;
 
 const styles = StyleSheet.create({
   container: {
-    shadowColor: '#A9A9A9',
+    shadowColor: "#A9A9A9",
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.5,
     shadowRadius: 8,
