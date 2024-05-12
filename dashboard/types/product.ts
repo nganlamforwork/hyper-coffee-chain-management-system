@@ -1,3 +1,5 @@
+import { User } from "./user";
+
 export type Product = {
   id?: string;
   name: string;
@@ -69,6 +71,10 @@ export type OrderDetails = {
 export type Feedback = {
   id?: string;
   rating: number;
+  message: string;
+  status: boolean;
+  order: Order;
+  customer: User;
   reply?: string;
 };
 

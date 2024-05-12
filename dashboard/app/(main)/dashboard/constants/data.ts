@@ -37,4 +37,10 @@ export const navItems: NavItem[] = [
     label: "Promotions",
     permissions: ["ADMIN"],
   },
+  {
+    href: "/dashboard/feedbacks",
+    icon: "feedback",
+    label: "Feedbacks",
+    permissions: ["ADMIN", "STAFF"],
+  },
 ];
