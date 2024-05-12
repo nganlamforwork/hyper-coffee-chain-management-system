@@ -43,10 +43,8 @@ export const ProductCard = ({
             objectFit="cover"
             className="rounded-full"
           />
-          <div>
-            <p className="text-md font-bold truncate line-clamp-2">
-              {product.name}
-            </p>
+          <div className="w-[80%]">
+            <p className="text-md font-bold truncate">{product.name}</p>
             <p className="text-sm text-yellow-900 font-bold">
               $ {product.price}
             </p>

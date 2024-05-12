@@ -673,6 +673,7 @@ import {
   Menu,
   Layers2,
   ShoppingCart,
+  Star,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -739,4 +740,5 @@ export const Icons: IconMap = {
   list: List,
   layers2: Layers2,
   shoppingCart: ShoppingCart,
+  feedback: Star,
 };
