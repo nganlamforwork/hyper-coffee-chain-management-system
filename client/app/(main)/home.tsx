@@ -1,4 +1,4 @@
-import { StyleSheet, ToastAndroid } from 'react-native';
+import { StyleSheet, ToastAndroid } from "react-native";
 import {
   Image,
   ScrollView,
@@ -6,21 +6,37 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from 'react-native';
-import React, { useState } from 'react';
-import { EvilIcons } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons';
-import { categoriesData } from '@/constants/home';
-import ProductCard from '@/components/ProductCard';
-import { useAuthStore } from '@/store/auth';
+} from "react-native";
+import React, { useState } from "react";
+import { EvilIcons } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
+import ProductCard from "@/components/ProductCard";
+import { useQuery } from "@tanstack/react-query";
+import { axiosInstance } from "@/config/axios";
+import { useAuthStore } from "@/store/auth";
+import { Category, Product } from "@/type";
 
 const Home = () => {
-  const [activeCategory, setActiveCategory] = useState(1);
+  const [activeCategory, setActiveCategory] = useState("");
   const { user } = useAuthStore();
+
+  const { data: categories } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () =>
+      axiosInstance.get("/get-categories").then((res) => res.data.categories),
+  });
+
+  const { data: newArrivalsProducts } = useQuery({
+    queryKey: ["products"],
+    queryFn: () =>
+      axiosInstance
+        .get("/get-products?limit=5")
+        .then((res) => res.data.products),
+  });
 
   const ProductCardAddToCart = ({}: any) => {
     ToastAndroid.showWithGravity(
-      'Coffee is Added to Cart',
+      "Coffee is Added to Cart",
       ToastAndroid.SHORT,
       ToastAndroid.CENTER
     );
@@ -51,23 +67,24 @@ const Home = () => {
           showsHorizontalScrollIndicator={false}
           className="ml-6 mb-4 min-h-[36px]"
         >
-          {categoriesData.map((item) => (
-            <TouchableOpacity
-              key={item.id}
-              className={`justify-center items-center mr-2 px-4 py-2 rounded-full bg-[#ECE0D1] ${
-                activeCategory === item.id ? 'bg-[#967259]' : ''
-              }`}
-              onPress={() => setActiveCategory(item.id)}
-            >
-              <Text
-                className={`text-[14px] text-[#2F3036] ${
-                  activeCategory === item.id ? 'text-[#E8E9F1]' : ''
+          {categories &&
+            categories.map((item: Category) => (
+              <TouchableOpacity
+                key={item.id}
+                className={`justify-center items-center mr-2 px-4 py-2 rounded-full bg-[#ECE0D1] ${
+                  activeCategory === item.id ? "bg-[#967259]" : ""
                 }`}
+                onPress={() => setActiveCategory(item.id)}
               >
-                {item.content}
-              </Text>
-            </TouchableOpacity>
-          ))}
+                <Text
+                  className={`text-[14px] text-[#2F3036] ${
+                    activeCategory === item.id ? "text-[#E8E9F1]" : ""
+                  }`}
+                >
+                  {item.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
         </ScrollView>
         <TitleSection text="New Arrivals" className="mb-4" />
         <ScrollView
@@ -75,11 +92,12 @@ const Home = () => {
           showsHorizontalScrollIndicator={false}
           className="ml-6 mb-4 pl-1 py-1 overflow-visible"
         >
-          {[0, 1, 2, 3, 4].map((item) => (
-            <View className="mr-4" key={item}>
-              <ProductCard />
-            </View>
-          ))}
+          {newArrivalsProducts &&
+            newArrivalsProducts.map((item: Product) => (
+              <View className="mr-4" key={item.id}>
+                <ProductCard product={item} />
+              </View>
+            ))}
         </ScrollView>
         <TitleSection text="Popular Picks" className="mb-4" />
         <ScrollView
@@ -87,11 +105,12 @@ const Home = () => {
           showsHorizontalScrollIndicator={false}
           className="ml-6 mb-4 pl-1 py-1 overflow-visible"
         >
-          {[0, 1, 2, 3, 4].map((item) => (
-            <View className="mr-4">
-              <ProductCard />
-            </View>
-          ))}
+          {newArrivalsProducts &&
+            newArrivalsProducts.map((item: Product) => (
+              <View className="mr-4" key={item.id}>
+                <ProductCard product={item} />
+              </View>
+            ))}
         </ScrollView>
         <TitleSection text="Hot Sales" className="mb-4" />
         <ScrollView
@@ -99,11 +118,12 @@ const Home = () => {
           showsHorizontalScrollIndicator={false}
           className="ml-6 mb-4 pl-1 py-1 overflow-visible"
         >
-          {[0, 1, 2, 3, 4].map((item) => (
-            <View className="mr-4">
-              <ProductCard />
-            </View>
-          ))}
+          {newArrivalsProducts &&
+            newArrivalsProducts.map((item: Product) => (
+              <View className="mr-4" key={item.id}>
+                <ProductCard product={item} />
+              </View>
+            ))}
         </ScrollView>
         <TitleSection text="News And Events" className="mb-4" />
         <ScrollView
@@ -152,7 +172,7 @@ function TitleSection({
 }
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: 'rgba(150, 114, 89, 0.2)',
+    backgroundColor: "rgba(150, 114, 89, 0.2)",
     borderRadius: 999,
     padding: 2,
   },

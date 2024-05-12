@@ -6,17 +6,16 @@ import {
   ToastAndroid,
   TouchableOpacity,
   View,
-} from 'react-native';
-import React, { useState } from 'react';
-import { EvilIcons } from '@expo/vector-icons';
-import { categoriesData } from '@/constants/home';
-import ProductCard from '@/components/ProductCard';
-import { useQuery } from '@tanstack/react-query';
-import { axiosInstance } from '@/config/axios';
-import { Product } from '@/type';
+} from "react-native";
+import React, { useState } from "react";
+import { EvilIcons } from "@expo/vector-icons";
+import ProductCard from "@/components/ProductCard";
+import { useQuery } from "@tanstack/react-query";
+import { axiosInstance } from "@/config/axios";
+import { Category, Product } from "@/type";
 
 const Categories = () => {
-  const [activeCategory, setActiveCategory] = useState(1);
+  const [activeCategory, setActiveCategory] = useState("");
   const renderItem = ({ item }: { item: Product }) => {
     return (
       <View style={styles.itemContainer}>
@@ -26,9 +25,15 @@ const Categories = () => {
   };
 
   const { data: products } = useQuery({
-    queryKey: ['products'],
+    queryKey: ["products"],
     queryFn: () =>
-      axiosInstance.get('/get-products').then((res) => res.data.products),
+      axiosInstance.get("/get-products").then((res) => res.data.products),
+  });
+
+  const { data: categories } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () =>
+      axiosInstance.get("/get-categories").then((res) => res.data.categories),
   });
 
   return (
@@ -47,23 +52,24 @@ const Categories = () => {
         showsHorizontalScrollIndicator={false}
         className="ml-6 mb-6 max-h-[36px]"
       >
-        {categoriesData.map((item) => (
-          <TouchableOpacity
-            key={item.id}
-            className={`justify-center items-center mr-2 px-4 py-2 rounded-full bg-[#ECE0D1] ${
-              activeCategory === item.id ? 'bg-[#967259]' : ''
-            }`}
-            onPress={() => setActiveCategory(item.id)}
-          >
-            <Text
-              className={`text-[14px] text-[#2F3036] ${
-                activeCategory === item.id ? 'text-[#E8E9F1]' : ''
+        {categories &&
+          categories.map((item: Category) => (
+            <TouchableOpacity
+              key={item.id}
+              className={`justify-center items-center mr-2 px-4 py-2 rounded-full bg-[#ECE0D1] ${
+                activeCategory === item.id ? "bg-[#967259]" : ""
               }`}
+              onPress={() => setActiveCategory(item.id)}
             >
-              {item.content}
-            </Text>
-          </TouchableOpacity>
-        ))}
+              <Text
+                className={`text-[14px] text-[#2F3036] ${
+                  activeCategory === item.id ? "text-[#E8E9F1]" : ""
+                }`}
+              >
+                {item.name}
+              </Text>
+            </TouchableOpacity>
+          ))}
       </ScrollView>
       <FlatList
         numColumns={2}
