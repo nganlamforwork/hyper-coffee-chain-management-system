@@ -29,7 +29,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useProducts } from "@/server/product/queries";
-import { Category, ExtraGroup, Product } from "@/types/product";
+import { ExtraGroup, Product } from "@/types/product";
 import Image from "next/image";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
@@ -96,7 +96,7 @@ const CreateExtraForm = ({ update, extraGroup }: CreateExtraGroupFormProps) => {
   const handleLinkProduct = (product: Product) => {
     // Check if the product already exists in chosenProducts array
     const isProductAlreadyAdded = chosenProducts.some(
-      (p) => p.id === product.id
+      (p) => p.id === product.id,
     );
 
     // If the product doesn't exist, add it
@@ -298,12 +298,12 @@ const CreateExtraForm = ({ update, extraGroup }: CreateExtraGroupFormProps) => {
               <AlertDescription>
                 {form.watch("type") === "optional"
                   ? `Your customer can select ${form.watch(
-                      "min"
+                      "min",
                     )} to ${form.watch("max")} option(s), or none at all.`
                   : `Your customer must select ${form.watch(
-                      "min"
+                      "min",
                     )} to ${form.watch(
-                      "max"
+                      "max",
                     )} option(s), none is not accepted.`}
               </AlertDescription>
             </Alert>
