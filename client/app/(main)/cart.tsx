@@ -12,9 +12,9 @@ import PaymentFooter from "@/components/PaymentFooter";
 import { Animated } from "react-native";
 import { useCartStore } from "@/store/cart";
 import { AntDesign } from "@expo/vector-icons";
+import { useOrderStore } from "@/store/order";
 
 interface CartProps {
-  // onCheckboxClick: (value: boolean) => void;
   navigation: any;
 }
 
@@ -79,9 +79,17 @@ const Cart: React.FC<CartProps> = ({ navigation }) => {
   const deleteItem = (productId: string) => {
     useCartStore.getState().deleteItem(productId);
   };
+  const handlePay = () => {
+    const selectedItemsDetails = items.filter((item) =>
+      selectedItems.includes(item.product.id)
+    );
+    useOrderStore.getState().updateItems(selectedItemsDetails, selectedPrice);
+    // navigation.navigate('PaymentPage');
+  };
+
   return (
     <>
-      <View style={styles.ContentContainer}>
+      <View style={styles.contentContainer}>
         <View
           style={{
             flexDirection: "row",
@@ -89,55 +97,45 @@ const Cart: React.FC<CartProps> = ({ navigation }) => {
             marginBottom: 16,
           }}
         >
-          <Text
-            style={{ width: 0, flexGrow: 1, textAlign: "center" }}
-            className="font-bold text-[24px] text-[#1F2024]"
-          >
-            Cart
-          </Text>
+          <Text style={styles.headerText}>Cart</Text>
           {selectedItems.length > 0 && (
             <TouchableOpacity onPress={handleReset}>
-              <Text className="font-bold text-[12px] text-[#967259]">
-                Cancel
-              </Text>
+              <Text style={styles.cancelText}>Cancel</Text>
             </TouchableOpacity>
           )}
         </View>
-        <Text className="mb-2 text-[14px]">
+        <Text style={styles.infoText}>
           You have{" "}
-          <Text className="font-bold text-[#967259]">
-            {items.length} item{items.length > 1 && "s"}
+          <Text style={styles.infoBoldText}>
+            {items.length} item{items.length > 1 ? "s" : ""}
           </Text>{" "}
           in your cart
         </Text>
         {selectedItems.length > 0 && (
-          <Animated.View
-            style={{
-              opacity: footerAnim, // Apply the opacity animation
-            }}
-          >
+          <Animated.View style={{ opacity: footerAnim }}>
             <View style={styles.line} />
-            <View style={{ flexDirection: "row" }} className="my-4">
+            <View style={styles.selectAllContainer}>
               <Checkbox
-                className="mr-4 w-4 h-4 border border-[#967259] rounded"
                 value={toggleSelectAll}
                 onValueChange={() => handleToggleSelectAll()}
                 color="#967259"
               />
-              <Text className="text-[14px] text-[#38220F]">
+              <Text style={styles.selectAllText}>
                 {toggleSelectAll ? "Unchoose All" : "Choose All"}
               </Text>
             </View>
           </Animated.View>
         )}
 
-        <ScrollView showsVerticalScrollIndicator={false} className="pt-1">
-          <View className="flex gap-4">
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={styles.scrollView}
+        >
+          <View style={styles.orderCardContainer}>
             {items &&
               items.map((item) => (
-                <View className="flex-row items-center">
+                <View style={styles.orderCardRow}>
                   <Checkbox
-                    className="mr-4 w-4 h-4 border border-[#967259] rounded"
                     value={selectedItems.includes(item.product.id)}
                     onValueChange={() => handleChange(item.product.id)}
                     color="#967259"
@@ -151,12 +149,12 @@ const Cart: React.FC<CartProps> = ({ navigation }) => {
 
                   <TouchableOpacity
                     onPress={() => deleteItem(item.product.id)}
-                    className="ml-3 w-6 h-6 rounded-3xl bg-[#ECE0D1] justify-center items-center"
+                    style={styles.deleteButton}
                   >
                     <AntDesign
                       name="delete"
                       size={14}
-                      className="text-destructive"
+                      style={styles.deleteIcon}
                     />
                   </TouchableOpacity>
                 </View>
@@ -166,11 +164,7 @@ const Cart: React.FC<CartProps> = ({ navigation }) => {
       </View>
 
       {selectedItems.length > 0 && (
-        <Animated.View
-          style={{
-            opacity: footerAnim, // Apply the opacity animation
-          }}
-        >
+        <Animated.View style={{ opacity: footerAnim }}>
           <PaymentFooter
             buttonTitle="Pay"
             price={{
@@ -179,6 +173,7 @@ const Cart: React.FC<CartProps> = ({ navigation }) => {
             }}
             quantity={selectedQuantity}
             navigation={navigation}
+            onPay={handlePay}
           />
         </Animated.View>
       )}
@@ -189,13 +184,74 @@ const Cart: React.FC<CartProps> = ({ navigation }) => {
 export default Cart;
 
 const styles = StyleSheet.create({
-  ContentContainer: {
+  contentContainer: {
     flex: 1,
     backgroundColor: "#f8f9fe",
     padding: 27,
   },
+  headerText: {
+    width: 0,
+    flexGrow: 1,
+    textAlign: "center",
+    fontFamily: "Font-Bold",
+    fontSize: 24,
+    color: "#1F2024",
+    fontWeight: "bold",
+  },
+  cancelText: {
+    fontFamily: "Font-Bold",
+    fontSize: 12,
+    color: "#967259",
+  },
+  infoText: {
+    marginBottom: 2,
+    fontFamily: "Font-Regular",
+    fontSize: 14,
+    color: "#38220F",
+  },
+  infoBoldText: {
+    fontFamily: "Font-Bold",
+    color: "#967259",
+  },
   line: {
     borderBottomColor: "#967259",
     borderBottomWidth: 1,
+    marginTop: 8,
+  },
+  selectAllContainer: {
+    flexDirection: "row",
+    marginTop: 8,
+    marginBottom: 16,
+    gap: 8,
+  },
+  selectAllText: {
+    fontFamily: "Font-Regular",
+    fontSize: 14,
+    color: "#38220F",
+  },
+  scrollView: {
+    paddingTop: 1,
+  },
+  orderCardContainer: {
+    flex: 1,
+    flexDirection: "column",
+    gap: 16,
+    marginTop: 4,
+  },
+  orderCardRow: {
+    flex: 1,
+    flexDirection: "row",
+    gap: 16,
+    alignItems: "center",
+  },
+  deleteButton: {
+    marginLeft: 3,
+    width: 24,
+    height: 24,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  deleteIcon: {
+    color: "#DE3C4B",
   },
 });

@@ -1,12 +1,5 @@
-import {
-  Image,
-  ImageProps,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import React, { useState } from "react";
+import React from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Extra, Product } from "@/type";
 
@@ -28,65 +21,99 @@ const OrderCard: React.FC<OrderCardProps> = ({
 
   const decreaseQuantity = () => {
     if (quantity > 1) {
+      // Decrease quantity logic here
     }
   };
 
   return (
-    <>
-      <View
-        style={styles.container}
-        className="flex-1 p-3 flex-row justify-between items-center bg-white rounded-xl gap-2"
-      >
-        <Image
-          source={{
-            uri: product?.imageUrl,
-          }}
-          className="w-[64px] h-[64px] rounded-full"
-        />
-        <View className="flex-col justify-between gap-1">
-          <Text className="text-[14px] font-bold text-[#38220F]">
-            {product?.name}
+    <View style={styles.container}>
+      <Image source={{ uri: product?.imageUrl }} style={styles.image} />
+      <View style={styles.detailsContainer}>
+        <Text style={styles.productName}>{product?.name}</Text>
+        {extras.map((item, index) => (
+          <Text key={index} style={styles.extraName}>
+            {item.name}
           </Text>
-          <View>
-            {extras &&
-              extras.map((item) => (
-                <Text className="text-[10px] text-[#38220F]">{item.name}</Text>
-              ))}
-          </View>
-          <Text className="text-[#967259] font-bold text-[16px]">
-            ${price && price.toFixed(2)}
-          </Text>
-        </View>
-        <View className="flex-row items-center gap-1">
-          <TouchableOpacity
-            onPress={decreaseQuantity}
-            className="w-4 h-4 rounded-3xl bg-[#ECE0D1] justify-center items-center"
-          >
-            <AntDesign name="minus" size={12} color="black" />
-          </TouchableOpacity>
-          <Text className="mx-1 text-[14px] text-[#1F2024] text-center">
-            {quantity}
-          </Text>
-          <TouchableOpacity
-            onPress={increaseQuantity}
-            className="w-4 h-4 rounded-3xl bg-[#ECE0D1] justify-center items-center"
-          >
-            <AntDesign name="plus" size={12} color="black" />
-          </TouchableOpacity>
-        </View>
+        ))}
+        <Text style={styles.price}>${price.toFixed(2)}</Text>
       </View>
-    </>
+      <View style={styles.quantityContainer}>
+        <TouchableOpacity
+          onPress={decreaseQuantity}
+          style={styles.quantityButton}
+        >
+          <AntDesign name="minus" size={12} color="black" />
+        </TouchableOpacity>
+        <Text style={styles.quantityText}>{quantity}</Text>
+        <TouchableOpacity
+          onPress={increaseQuantity}
+          style={styles.quantityButton}
+        >
+          <AntDesign name="plus" size={12} color="black" />
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 };
-
-export default OrderCard;
 
 const styles = StyleSheet.create({
   container: {
     shadowColor: "#A9A9A9",
-    shadowOffset: { width: 0, height: 0 }, // Dịch chuyển
-    shadowOpacity: 0.5, // Độ trong suốt
-    shadowRadius: 2, // Bán kính blur
-    elevation: 1, // For Android
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+    elevation: 1,
+    backgroundColor: "white",
+    borderRadius: 8,
+    padding: 10,
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  contentContainer: {},
+  image: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    marginRight: 10,
+  },
+  detailsContainer: {
+    flex: 1,
+  },
+  productName: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#38220F",
+    marginBottom: 5,
+  },
+  extraName: {
+    fontSize: 10,
+    color: "#38220F",
+  },
+  price: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#967259",
+    marginTop: 5,
+  },
+  quantityContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  quantityButton: {
+    width: 20,
+    height: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#ECE0D1",
+    borderRadius: 10,
+    marginRight: 5,
+  },
+  quantityText: {
+    fontSize: 14,
+    color: "#1F2024",
+    marginHorizontal: 5,
   },
 });
+
+export default OrderCard;

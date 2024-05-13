@@ -24,6 +24,7 @@ interface CartItem {
   quantity: number;
   note?: string;
 }
+
 const ProductDetail = () => {
   const [note, setNote] = useState("");
   const [price, setPrice] = useState(0);
@@ -48,9 +49,11 @@ const ProductDetail = () => {
       console.log("No route to go back to");
     }
   };
+
   const handleHeartPress = () => {
     console.log("Heart button pressed");
   };
+
   const handleExtraSelection = (extraId: string) => {
     const isSelected = selectedExtras.includes(extraId);
     if (isSelected) {
@@ -59,19 +62,32 @@ const ProductDetail = () => {
       setSelectedExtras([...selectedExtras, extraId]);
     }
   };
+
   const addToCart = () => {
+    let extrasTotalPrice = 0;
+    selectedExtras.forEach((extraId) => {
+      const extra = product?.extraGroups
+        .flatMap((group: ExtraGroups) => group.extras)
+        .find((extra: Extra) => extra.id === extraId);
+      if (extra) {
+        extrasTotalPrice += extra.price;
+      }
+    });
+
+    const totalPrice = ((product?.price || 0) + extrasTotalPrice) * quantity;
+
     const cartItem: CartItem = {
       product: product,
-      price: price,
+      price: totalPrice,
       extras: selectedExtras.map((id) => {
         return product.extraGroups
           .flatMap((group: ExtraGroups) => group.extras)
           .find((extra: Extra) => extra.id === id) as Extra;
       }),
-      quantity: quantity, // Default quantity
+      quantity: quantity,
       note: note,
     };
-    console.log(cartItem);
+
     useCartStore.getState().addItem(cartItem);
   };
 
@@ -133,16 +149,10 @@ const ProductDetail = () => {
           {/* Black Overlay */}
           <View style={styles.overlay} />
         </View>
-        <ScrollView className="w-full">
-          <View
-            style={{
-              padding: 24,
-              gap: 24,
-              paddingBottom: 160,
-            }}
-          >
+        <ScrollView style={styles.scrollView}>
+          <View style={styles.descriptionContainer}>
             <Text style={styles.productPageTitle}>Description</Text>
-            <Text style={{ fontSize: 14 }}>{product?.description}</Text>
+            <Text style={styles.descriptionText}>{product?.description}</Text>
             <>
               {product?.extraGroups?.length &&
                 product.extraGroups.map((item: ExtraGroups) => {
@@ -165,19 +175,19 @@ const ProductDetail = () => {
               value={note}
               placeholder="Type your note here"
             />
-
             <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
           </View>
         </ScrollView>
         <AddToCartButton
-          quantity={quantity}
           price={price}
+          quantity={quantity}
           onPress={addToCart}
         />
       </View>
     </View>
   );
 };
+
 interface ExtraSectionProps {
   extraItem: ExtraGroups;
   handleExtraSelection: (extraId: string) => void;
@@ -192,27 +202,30 @@ const ExtraSection: React.FC<ExtraSectionProps> = ({
   const radio = extraItem.min == extraItem.max;
   return (
     <View>
-      <View className="flex flex-row gap-2 items-end">
-        <Text style={styles.productPageTitle} className="leading-none">
-          {extraItem?.name}
-        </Text>
-        <Text className="leading-none text-slate-600">
+      <View style={styles.extraTitleContainer}>
+        <Text style={styles.productPageTitle}>{extraItem?.name}</Text>
+        <Text style={styles.extraSubtitle}>
           {extraItem?.type == "optional" ? "Optional," : "Must,"}
           {radio
             ? ` max ${extraItem?.max}`
             : ` min ${extraItem?.min}, max ${extraItem?.max}`}
         </Text>
       </View>
-
-      <View style={{ marginTop: 12, display: "flex", gap: 8 }}>
+      <View style={styles.extraListContainer}>
         {extraItem?.extras?.map((item) => (
           <TouchableOpacity
             key={item.id}
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              marginBottom: 4,
-            }}
+            style={[
+              styles.extraItem,
+              {
+                marginBottom: 4,
+                opacity:
+                  selectedExtras.length >= extraItem.max &&
+                  !selectedExtras.includes(item.id)
+                    ? 0.5
+                    : 1,
+              },
+            ]}
             onPress={() => handleExtraSelection(item.id)}
             disabled={
               selectedExtras.length >= extraItem.max &&
@@ -223,23 +236,22 @@ const ExtraSection: React.FC<ExtraSectionProps> = ({
               value={selectedExtras.includes(item.id)}
               onValueChange={() => handleExtraSelection(item.id)}
               style={{ marginRight: 8 }}
-              className="mr-4 w-4 h-4 border border-[#967259] rounded"
               color="#967259"
             />
             <Text>{item.name}</Text>
-            <Text style={{ marginLeft: "auto" }} className="text-slate-600">
-              ${item.price}
-            </Text>
+            <Text style={styles.extraPrice}>${item.price}</Text>
           </TouchableOpacity>
         ))}
       </View>
     </View>
   );
 };
+
 interface QuantitySelectorProps {
   quantity: number;
   setQuantity: React.Dispatch<React.SetStateAction<number>>;
 }
+
 const QuantitySelector: React.FC<QuantitySelectorProps> = ({
   quantity,
   setQuantity,
@@ -253,26 +265,19 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
   const increaseQuantity = () => {
     setQuantity(quantity + 1);
   };
+
   return (
-    <View
-      className="flex-row items-center"
-      style={{ gap: 4, justifyContent: "center" }}
-    >
+    <View style={styles.quantitySelectorContainer}>
       <TouchableOpacity
-        className="p-1 rounded-3xl bg-[#ECE0D1] justify-center items-center"
+        style={{ backgroundColor: "#ECE0D1", padding: 4, borderRadius: 999 }}
         onPress={decreaseQuantity}
       >
         <Feather name="minus" size={20} color="black" />
       </TouchableOpacity>
-      <Text
-        className="mx-1 text-[14px] text-[#1F2024]"
-        style={{ fontSize: 20 }}
-      >
-        {quantity}
-      </Text>
+      <Text style={styles.quantityText}>{quantity}</Text>
       <TouchableOpacity
-        className="p-1 rounded-3xl bg-[#ECE0D1] justify-center items-center"
         onPress={increaseQuantity}
+        style={{ backgroundColor: "#ECE0D1", padding: 4, borderRadius: 999 }}
       >
         <Feather name="plus" size={20} color="black" />
       </TouchableOpacity>
@@ -293,10 +298,8 @@ const AddToCartButton = ({
     <View style={styles.addToCartContainer}>
       <TouchableOpacity style={styles.addToCartButton} onPress={onPress}>
         <View>
-          <Text className="text-slate-200 mb-1">{quantity} item(s)</Text>
-          <Text style={styles.addToCartPrice}>
-            ${price && price.toFixed(2)}
-          </Text>
+          <Text style={styles.addToCartQuantity}>{quantity} item(s)</Text>
+          <Text style={styles.addToCartPrice}>${price.toFixed(2)}</Text>
         </View>
         <Text style={styles.addToCartText}>Add to Cart</Text>
       </TouchableOpacity>
@@ -340,18 +343,37 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#38220F",
   },
-  buttonSizeItem: {
-    alignItems: "center",
-    gap: 8,
+  descriptionContainer: {
+    padding: 24,
+    gap: 24,
+    paddingBottom: 160,
   },
-  buttonTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
+  descriptionText: {
+    fontSize: 14,
+  },
+  extraTitleContainer: {
+    flexDirection: "row",
+    alignItems: "baseline",
+    justifyContent: "space-between",
+    marginBottom: 12,
+  },
+  extraSubtitle: {
+    fontSize: 12,
     color: "#38220F",
   },
-  buttonPrice: {
-    fontSize: 14,
-    color: "#967259",
+  extraListContainer: {
+    display: "flex",
+    gap: 8,
+  },
+  extraItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 4,
+  },
+  extraPrice: {
+    marginLeft: "auto",
+    fontSize: 12,
+    color: "#71727A",
   },
   input: {
     borderWidth: 1,
@@ -359,6 +381,16 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: 16,
     minHeight: 100,
+  },
+  quantitySelectorContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+  },
+  quantityText: {
+    fontSize: 20,
+    color: "#1F2024",
   },
   addToCartContainer: {
     position: "absolute",
@@ -381,6 +413,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+  },
+  addToCartQuantity: {
+    color: "#D4D6DD",
+    marginBottom: 2,
   },
   addToCartPrice: {
     color: "white",

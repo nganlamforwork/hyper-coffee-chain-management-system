@@ -1,255 +1,206 @@
-import OrderCard from '@/components/OrderCard';
-import PaymentHeader from '@/components/PaymentComponent/PaymentHeader';
-import Radio from '@/components/PaymentComponent/Radio';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 import {
-    View,
-    Text,
-    TouchableOpacity,
-    Dimensions,
-    StyleSheet,
-    ScrollView,
-    TextInput,
-} from 'react-native';
-import { Image } from 'react-native';
-
-interface ReviewProps {
-    navigation: any; // replace 'any' with your navigation prop type
-}
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import RadioPayment from "@/components/PaymentComponent/RadioPayment";
+import { useOrderStore } from "@/store/order";
+import OrderCard from "@/components/OrderCard";
+import { axiosInstance } from "@/config/axios";
 
 const options = [
-    {
-        label: 'Standard Shipping',
-        value: 'standard',
-        description: 'Delivery in 5-7 business days',
-        price: 0.5,
-    },
-    {
-        label: 'Express Shipping',
-        value: 'express',
-        description: 'Delivery in 2-3 business days',
-        price: 1,
-    },
-    {
-        label: 'Next Day Shipping',
-        value: 'next_day',
-        description: 'Delivery by tomorrow',
-        price: 0,
-    },
+  {
+    label: "COD",
+    value: "cod",
+    image: null,
+  },
 ];
 
-const Review: React.FC<ReviewProps> = ({navigation}) => {
-    const [value, setValue] = useState<string | null>(null);
-    const [isFocus, setIsFocus] = useState(false);
-    const [ship, setShip] = useState<string | null>(options[0].value);
+interface ReviewProps {
+  navigation: any; // replace 'any' with your navigation prop type
+}
 
-    const [currentPosition, setCurrentPosition] = useState(0);
-    const [coffeeData, setCoffeeData] = useState([
-        { id: 1, isChecked: false },
-        { id: 2, isChecked: false },
-        { id: 3, isChecked: false },
-        { id: 4, isChecked: false },
-        { id: 5, isChecked: false },
-    ]);
-    const renderLabel = () => {
-        if (value || isFocus) {
-            return <Text style={[isFocus && { color: 'blue' }]}>Dropdown label</Text>;
-        }
-        return null;
-    };
-    return (
-        <ScrollView>
-            <View style={styles.container}>
-                <PaymentHeader state={2} />
-            </View>
+const Review: React.FC<ReviewProps> = ({ navigation }) => {
+  const [payment, setPayment] = useState<string | null>(options[0].value);
+  const { items, total } = useOrderStore();
+  const [name, setName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [addressDetail, setAddressDetail] = useState("");
+  const [orderId, setOrderId] = useState(null);
 
-            <View style={styles.contentContainer}>
-                <View style={styles.contentComponent}>
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                        }}
-                    >
-                        <Text style={styles.title}>Address</Text>
-                        <TouchableOpacity onPress={() => {}}>
-                            <Text style={{ fontSize: 14, fontWeight: '700', color: '#967259' }}>
-                                Change
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.cardStyle}>
-                        <View style={{ borderRadius: 12, flexDirection: 'row', flexWrap: 'wrap' }}>
-                            <Text
-                                style={{
-                                    color: '#967259',
-                                    fontSize: 10,
-                                    backgroundColor: '#ECE0D1',
-                                    paddingHorizontal: 6,
-                                    paddingVertical: 8,
-                                    borderRadius: 12,
-                                }}
-                            >
-                                Default
-                            </Text>
-                        </View>
-                        <Text style={{ fontSize: 16, fontWeight: '700', marginTop: 12 }}>
-                            John Doe
-                        </Text>
-                        <Text style={{ fontSize: 14, marginTop: 4 }}>+1 123 456 7890</Text>
-                        <Text style={{ fontSize: 14, marginTop: 4 }}>1234 Main Street</Text>
-                    </View>
-                </View>
-                <View style={styles.contentComponent}>
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                        }}
-                    >
-                        <Text style={styles.title}>Branch</Text>
-                    </View>
-                    <View style={styles.cardStyle}>
-                        <Text>Branch 1</Text>
-                    </View>
-                </View>
-                <View style={styles.contentComponent}>
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                        }}
-                    >
-                        <Text style={styles.title}>Your Order</Text>
-                    </View>
-                    <ScrollView showsVerticalScrollIndicator={false} className="pt-1">
-                        {coffeeData.map((item) => (
-                            <View className="flex-row items-center" style={{ marginBottom: 15 }}>
-                                <OrderCard />
-                            </View>
-                        ))}
-                    </ScrollView>
-                </View>
-                <View style={styles.contentComponent}>
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                        }}
-                    >
-                        <Text style={styles.title}>Payment</Text>
-                    </View>
-                    <View
-                        style={[
-                            styles.cardStyle,
-                            { flexDirection: 'row', justifyContent: 'space-between' },
-                        ]}
-                    >
-                        <Text>VietQR</Text>
-                        <Image source={require('../../../assets/images/vietqr.png')} />
-                    </View>
-                </View>
-                <View style={styles.contentComponent}>
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                        }}
-                    >
-                        <Text style={styles.title}>Summary</Text>
-                    </View>
-                    <View style={[styles.cardStyle, { gap: 10 }]}>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text>Subtotal</Text>
-                            <Text style={styles.price}>$100.00</Text>
-                        </View>
-                        <View style={{ width: '100%', height: 1, backgroundColor: '#C5C6CC' }} />
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <View>
-                                <Text>Shipping</Text>
-                                <Text style={{ fontSize: 10, color: '#666666' }}>
-                                    Economy Shipping
-                                </Text>
-                            </View>
-                            <Text style={styles.price}>$100.00</Text>
-                        </View>
-                        <View style={{ width: '100%', height: 1, backgroundColor: '#C5C6CC' }} />
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={{ color: '#1F2024', fontWeight: '700', fontSize: 16 }}>
-                                Total
-                            </Text>
-                            <Text style={styles.price}>$100.00</Text>
-                        </View>
-                    </View>
-                </View>
-                <TouchableOpacity style={styles.buttonContinue} onPress={()=>{navigation.navigate("SuccessOrder")}}>
-                    <Text
-                        style={{
-                            color: 'white',
-                            textAlign: 'center',
-                            fontWeight: '400',
-                            fontSize: 14,
-                        }}
-                    >
-                        Continue
-                    </Text>
-                </TouchableOpacity>
-            </View>
-        </ScrollView>
-    );
+  const createOrder = async () => {
+    try {
+      const orderData = {
+        name: name,
+        address: addressDetail,
+        phoneNumber: phoneNumber,
+        items: items.map((item) => ({
+          productId: item.product.id,
+          quantity: item.quantity,
+          subTotal: item.price,
+          note: item.note, // if available
+        })),
+        total: total,
+      };
+
+      const response = await axiosInstance.post(
+        "/admin/create-order",
+        orderData
+      );
+
+      if (response?.data?.success) {
+        console.log("Order created successfully!");
+        setOrderId(response.data.order.id); // Save the order ID
+        navigation.navigate("SuccessOrder", {
+          orderId: response.data.order.id,
+        });
+      } else {
+        console.error("Failed to create order:", response?.data?.message);
+      }
+    } catch (error) {
+      console.error("Error creating order:", error);
+    }
+  };
+
+  return (
+    <>
+      <ScrollView style={styles.contentContainer}>
+        <View style={styles.contentComponent}>
+          <Text style={styles.headerText}>Review Order</Text>
+          <Text style={styles.title}>Address</Text>
+          <View>
+            <TextInput
+              style={styles.input}
+              placeholder="Receiver's name"
+              value={name}
+              onChangeText={setName}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Receiver's phone number"
+              value={phoneNumber}
+              onChangeText={setPhoneNumber}
+            />
+            <TextInput
+              style={styles.inputDetail}
+              multiline
+              numberOfLines={4}
+              placeholder="Address detail"
+              value={addressDetail}
+              onChangeText={setAddressDetail}
+            />
+          </View>
+        </View>
+        <View style={styles.contentComponent}>
+          <Text style={styles.title}>Payment Method</Text>
+          <View>
+            <RadioPayment
+              options={options}
+              checkedValue={payment || ""}
+              onChange={setPayment}
+              style={{ backgroundColor: "match-parent" }}
+            />
+          </View>
+        </View>
+        <View style={styles.contentComponent}>
+          <Text style={styles.title}>Order Details</Text>
+          <View style={styles.orderDetailsContainer}>
+            {items.map((item) => (
+              <View key={item.product.id} style={styles.orderItem}>
+                <OrderCard
+                  product={item.product}
+                  price={item.price}
+                  extras={item.extras}
+                  quantity={item.quantity}
+                />
+              </View>
+            ))}
+          </View>
+        </View>
+        <View style={styles.totalContainer}>
+          <Text style={styles.title}>Total</Text>
+          <Text style={styles.totalPrice}>${total.toFixed(2)}</Text>
+        </View>
+        <TouchableOpacity style={styles.buttonContinue} onPress={createOrder}>
+          <Text style={styles.buttonText}>Place Order Now</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </>
+  );
 };
 
-export default Review;
-
 const styles = StyleSheet.create({
-    container: {},
-    gradient: {
-        width: Dimensions.get('window').width,
-        height: 225,
-        borderBottomLeftRadius: 32,
-        borderBottomRightRadius: 32,
-        justifyContent: 'center',
-        gap: 15,
-    },
-    contentComponent: {
-        gap: 16,
-    },
-    cardStyle: {
-        backgroundColor: 'white',
-        borderRadius: 16,
-        padding: 16,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-    },
-    title: {
-        fontSize: 18,
-        fontWeight: '700',
-    },
-    contentContainer: {
-        padding: 25,
-        gap: 16,
-    },
-    buttonContinue: {
-        backgroundColor: '#967259',
-        borderRadius: 16,
-        justifyContent: 'center',
-        marginBottom: 20,
-        paddingVertical: 16,
-    },
-    price: {
-        color: '#967259',
-        fontWeight: 'bold',
-        fontSize: 16,
-    },
+  headerText: {
+    textAlign: "center",
+    fontFamily: "Font-Bold",
+    fontSize: 24,
+    color: "#1F2024",
+    fontWeight: "bold",
+  },
+  contentContainer: {
+    flex: 1,
+    backgroundColor: "#f8f9fe",
+    padding: 27,
+    gap: 16,
+  },
+  contentComponent: {
+    marginBottom: 16,
+    gap: 16,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: "700",
+  },
+  input: {
+    backgroundColor: "white",
+    borderColor: "#C5C6CC",
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 10,
+  },
+  inputDetail: {
+    borderColor: "#C5C6CC",
+    borderWidth: 1,
+    backgroundColor: "white",
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 10,
+    minHeight: 100,
+  },
+  orderDetailsContainer: {
+    flexDirection: "column",
+    gap: 16,
+  },
+  orderItem: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  totalContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 16,
+  },
+  totalPrice: {
+    fontSize: 20,
+  },
+  buttonContinue: {
+    backgroundColor: "#967259",
+    borderRadius: 16,
+    justifyContent: "center",
+    marginBottom: 20,
+    paddingVertical: 16,
+  },
+  buttonText: {
+    color: "white",
+    textAlign: "center",
+    fontWeight: "400",
+    fontSize: 14,
+  },
 });
+
+export default Review;

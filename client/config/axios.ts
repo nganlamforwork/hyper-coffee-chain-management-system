@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-const BASE_URL = 'https://hypercoffee-api.onrender.com/api/v1';
+const BASE_URL = "http://localhost:8000/api/v1";
 export const axiosInstance = axios.create({
-	baseURL: BASE_URL,
+  baseURL: BASE_URL,
 });
