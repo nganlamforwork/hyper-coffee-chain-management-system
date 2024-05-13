@@ -26,12 +26,6 @@ export const navItems: NavItem[] = [
     permissions: ["ADMIN"],
   },
   {
-    href: "/dashboard/customers",
-    icon: "user",
-    label: "Customers",
-    permissions: ["ADMIN"],
-  },
-  {
     href: "/dashboard/promotions",
     icon: "tag",
     label: "Promotions",
