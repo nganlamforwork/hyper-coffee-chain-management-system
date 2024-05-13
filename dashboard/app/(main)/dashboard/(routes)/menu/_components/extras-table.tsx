@@ -33,9 +33,8 @@ interface ExtrasTableProps {
 }
 
 const ExtrasTable = ({ extraGroups }: ExtrasTableProps) => {
-  console.log("🚀 ~ ExtrasTable ~ extraGroups:", extraGroups);
   const [selectedGroup, setSelectedGroup] = useState<string | undefined>(
-    undefined
+    undefined,
   );
   const updateExtraStock = useUpdateExtraStock();
   const deleteExtraGroup = useDeleteExtraGroup();
@@ -99,7 +98,7 @@ const ExtrasTable = ({ extraGroups }: ExtrasTableProps) => {
                           <Edit className="h-4 w-4" />
                         </Button>
                       </SheetTrigger>
-                      <SheetContent className="sm:max-w-2xl overflow-auto">
+                      <SheetContent className="sm:max-w-3xl overflow-auto">
                         <SheetHeader>
                           <SheetTitle>UPDATE EXTRA GROUP</SheetTitle>
                           <SheetDescription>
@@ -109,7 +108,7 @@ const ExtrasTable = ({ extraGroups }: ExtrasTableProps) => {
                         <CreateExtraForm
                           update={true}
                           extraGroup={extraGroups?.find(
-                            (group) => group.id === selectedGroup
+                            (group) => group.id === selectedGroup,
                           )}
                         />
                       </SheetContent>
