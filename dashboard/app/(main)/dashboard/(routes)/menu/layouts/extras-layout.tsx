@@ -27,7 +27,7 @@ const ExtrasLayout = () => {
                 <Plus className="mr-2 h-4 w-4" /> Add New Extra Group
               </Button>
             </SheetTrigger>
-            <SheetContent className="sm:max-w-lg overflow-auto">
+            <SheetContent className="sm:max-w-3xl overflow-auto">
               <SheetHeader>
                 <SheetTitle>CREATE NEW EXTRA GROUP</SheetTitle>
                 <SheetDescription>
