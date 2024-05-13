@@ -12,12 +12,18 @@ import { Extra, Product } from "@/type";
 
 interface OrderCardProps {
   product: Product;
+  price: number;
   extras: Extra[];
   quantity: number;
   note?: string;
 }
 
-const OrderCard: React.FC<OrderCardProps> = ({ product, extras, quantity }) => {
+const OrderCard: React.FC<OrderCardProps> = ({
+  product,
+  price,
+  extras,
+  quantity,
+}) => {
   const increaseQuantity = () => {};
 
   const decreaseQuantity = () => {
@@ -48,7 +54,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ product, extras, quantity }) => {
               ))}
           </View>
           <Text className="text-[#967259] font-bold text-[16px]">
-            ${product?.price}
+            ${price && price.toFixed(2)}
           </Text>
         </View>
         <View className="flex-row items-center gap-1">

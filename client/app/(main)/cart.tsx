@@ -20,6 +20,8 @@ interface CartProps {
 
 const Cart: React.FC<CartProps> = ({ navigation }) => {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [selectedQuantity, setSelectedQuantity] = useState(0);
+  const [selectedPrice, setSelectedPrice] = useState(0);
   const { items } = useCartStore();
 
   const [toggleSelectAll, setToggleSelectAll] = useState(false);
@@ -39,7 +41,21 @@ const Cart: React.FC<CartProps> = ({ navigation }) => {
       footerAnim.setValue(0); // reset position
       startAnimation();
     }
-  }, [selectedItems]);
+
+    const { quantity, totalPrice } = items.reduce(
+      (acc, item) => {
+        if (selectedItems.includes(item.product.id)) {
+          acc.quantity += item.quantity;
+          acc.totalPrice += item.price;
+        }
+        return acc;
+      },
+      { quantity: 0, totalPrice: 0 }
+    );
+
+    setSelectedQuantity(quantity);
+    setSelectedPrice(totalPrice);
+  }, [selectedItems, items]);
 
   const handleReset = () => {
     setSelectedItems([]);
@@ -128,6 +144,7 @@ const Cart: React.FC<CartProps> = ({ navigation }) => {
                   />
                   <OrderCard
                     product={item.product}
+                    price={item.price}
                     extras={item.extras}
                     quantity={item.quantity}
                   />
@@ -156,8 +173,11 @@ const Cart: React.FC<CartProps> = ({ navigation }) => {
         >
           <PaymentFooter
             buttonTitle="Pay"
-            price={{ price: "0", currency: "$" }}
-            quantity={4}
+            price={{
+              price: selectedPrice.toFixed(2).toString(),
+              currency: "$",
+            }}
+            quantity={selectedQuantity}
             navigation={navigation}
           />
         </Animated.View>

@@ -9,6 +9,7 @@ interface CartState {
 
 interface CartItem {
   product: Product;
+  price: number;
   extras: Extra[];
   quantity: number;
   note?: string;

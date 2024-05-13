@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -19,12 +19,14 @@ import { useCartStore } from "@/store/cart";
 
 interface CartItem {
   product: Product;
+  price: number;
   extras: Extra[];
   quantity: number;
   note?: string;
 }
 const ProductDetail = () => {
   const [note, setNote] = useState("");
+  const [price, setPrice] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [selectedExtras, setSelectedExtras] = useState<string[]>([]);
 
@@ -60,6 +62,7 @@ const ProductDetail = () => {
   const addToCart = () => {
     const cartItem: CartItem = {
       product: product,
+      price: price,
       extras: selectedExtras.map((id) => {
         return product.extraGroups
           .flatMap((group: ExtraGroups) => group.extras)
@@ -71,6 +74,20 @@ const ProductDetail = () => {
     console.log(cartItem);
     useCartStore.getState().addItem(cartItem);
   };
+
+  useEffect(() => {
+    let totalPrice = product?.price || 0;
+    selectedExtras.forEach((extraId) => {
+      const extra = product?.extraGroups
+        .flatMap((group: ExtraGroups) => group.extras)
+        .find((extra: Extra) => extra.id === extraId);
+      if (extra) {
+        totalPrice += extra.price;
+      }
+    });
+    setPrice(totalPrice * quantity);
+  }, [selectedExtras, product, quantity]);
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
@@ -121,7 +138,7 @@ const ProductDetail = () => {
             style={{
               padding: 24,
               gap: 24,
-              paddingBottom: 100,
+              paddingBottom: 160,
             }}
           >
             <Text style={styles.productPageTitle}>Description</Text>
@@ -152,7 +169,11 @@ const ProductDetail = () => {
             <QuantitySelector quantity={quantity} setQuantity={setQuantity} />
           </View>
         </ScrollView>
-        <AddToCartButton price={product?.price} onPress={addToCart} />
+        <AddToCartButton
+          quantity={quantity}
+          price={price}
+          onPress={addToCart}
+        />
       </View>
     </View>
   );
@@ -261,16 +282,25 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
 
 const AddToCartButton = ({
   price,
+  quantity,
   onPress,
 }: {
   price: number;
+  quantity: number;
   onPress: () => void;
 }) => {
   return (
-    <TouchableOpacity style={styles.addToCartButton} onPress={onPress}>
-      <Text style={styles.addToCartPrice}>${price && price.toFixed(2)}</Text>
-      <Text style={styles.addToCartText}>Add to Cart</Text>
-    </TouchableOpacity>
+    <View style={styles.addToCartContainer}>
+      <TouchableOpacity style={styles.addToCartButton} onPress={onPress}>
+        <View>
+          <Text className="text-slate-200 mb-1">{quantity} item(s)</Text>
+          <Text style={styles.addToCartPrice}>
+            ${price && price.toFixed(2)}
+          </Text>
+        </View>
+        <Text style={styles.addToCartText}>Add to Cart</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
@@ -330,18 +360,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     minHeight: 100,
   },
+  addToCartContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: 24,
+    backgroundColor: "white",
+    shadowColor: "#A9A9A9",
+    shadowOffset: { width: 0, height: 0 }, // Dịch chuyển
+    shadowOpacity: 0.5, // Độ trong suốt
+    shadowRadius: 2, // Bán kính blur
+    elevation: 1, // For Android
+  },
   addToCartButton: {
     backgroundColor: "#38220F",
     paddingVertical: 16,
     paddingHorizontal: 24,
     borderRadius: 16,
-    position: "absolute",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    bottom: 20,
-    left: 24,
-    right: 24,
   },
   addToCartPrice: {
     color: "white",
