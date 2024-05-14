@@ -1,26 +1,20 @@
 import { Platform, StatusBar, StyleSheet, View } from "react-native";
 import React, { useState } from "react";
-import { Slot, Tabs } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesome } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import Cart from "./cart";
 import Categories from "./categories";
 import Favorites from "./favorites";
 import Home from "./home";
 import Me from "./me";
-import OrderScreen from "./order";
-import ShippingMethod from "./order/shippingMethod";
-import Payment from "./order/payment";
 import Review from "./order/review";
 import SuccessOrder from "./order/successOrder";
 import Feedback from "./order/feedback";
 import Thank from "./order/thank";
+import Cart from "./order/index";
 
 const Tab = createBottomTabNavigator();
-
-const CartStack = createStackNavigator();
+const OrderStack = createStackNavigator();
 
 const MainLayout = () => {
   const [isChecked, setIsChecked] = useState(false);
@@ -29,15 +23,14 @@ const MainLayout = () => {
     <>
       <StatusBar translucent barStyle="dark-content" />
 
-      <SafeAreaView edges={["top"]} style={{ flex: 1, paddingTop: 0 }}>
-        <Tab.Navigator
-          screenOptions={{
-            tabBarStyle: styles.container,
-            tabBarActiveTintColor: "white",
-            tabBarInactiveTintColor: "gray",
-          }}
-        >
-          <Tab.Screen
+      <Tab.Navigator
+        screenOptions={{
+          tabBarStyle: styles.container,
+          tabBarActiveTintColor: "white",
+          tabBarInactiveTintColor: "gray",
+        }}
+      >
+        {/* <Tab.Screen
             name="cart"
             options={{
               title: "Cart",
@@ -73,68 +66,107 @@ const MainLayout = () => {
                 <CartStack.Screen name="Thank" component={Thank} />
               </CartStack.Navigator>
             )}
-          </Tab.Screen>
+          </Tab.Screen> */}
 
-          <Tab.Screen
-            name="categories"
-            component={Categories}
-            options={{
-              title: "Categories",
-              headerShown: false,
-              tabBarIcon: ({ focused }) => (
-                <FontAwesome
-                  name="list"
-                  size={20}
-                  color={focused ? "white" : "gray"}
-                />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="home"
-            component={Home}
-            options={{
-              title: "",
-              headerShown: false,
-              tabBarIcon: () => (
-                <View style={styles.home}>
-                  <FontAwesome name="home" size={36} color="white" />
-                </View>
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="favorites"
-            component={Favorites}
-            options={{
-              title: "Favorites",
-              headerShown: false,
-              tabBarIcon: ({ focused }) => (
-                <FontAwesome
-                  name="heart"
-                  size={20}
-                  color={focused ? "white" : "gray"}
-                />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="me"
-            component={Me}
-            options={{
-              title: "Me",
-              headerShown: false,
-              tabBarIcon: ({ focused }) => (
-                <FontAwesome
-                  name="user"
-                  size={20}
-                  color={focused ? "white" : "gray"}
-                />
-              ),
-            }}
-          />
-        </Tab.Navigator>
-      </SafeAreaView>
+        <Tab.Screen
+          name="Cart"
+          options={{
+            title: "Cart",
+            headerShown: false,
+            tabBarIcon: ({ focused }) => (
+              <FontAwesome
+                name="shopping-cart"
+                size={20}
+                color={focused ? "white" : "gray"}
+              />
+            ),
+          }}
+        >
+          {(props) => (
+            <OrderStack.Navigator>
+              <OrderStack.Screen name="Cart" component={Cart} />
+              <OrderStack.Screen
+                name="Review"
+                component={Review}
+                options={{ title: "Review Order" }}
+              />
+              <OrderStack.Screen
+                name="Feedback"
+                component={Feedback}
+                options={{ title: "Give Us Feedback" }}
+              />
+              <OrderStack.Screen
+                name="Thank"
+                component={Thank}
+                options={{ title: "Thank You!" }}
+              />
+              <OrderStack.Screen
+                name="SuccessOrder"
+                component={SuccessOrder}
+                options={{ title: "Congratulations" }}
+              />
+            </OrderStack.Navigator>
+          )}
+        </Tab.Screen>
+        <Tab.Screen
+          name="categories"
+          component={Categories}
+          options={{
+            title: "Categories",
+            headerShown: false,
+            tabBarIcon: ({ focused }) => (
+              <FontAwesome
+                name="list"
+                size={20}
+                color={focused ? "white" : "gray"}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="home"
+          component={Home}
+          options={{
+            title: "",
+            headerShown: false,
+            tabBarIcon: () => (
+              <View style={styles.home}>
+                <FontAwesome name="home" size={36} color="white" />
+              </View>
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="favorites"
+          component={Favorites}
+          options={{
+            title: "Favorites",
+            headerShown: false,
+            tabBarIcon: ({ focused }) => (
+              <FontAwesome
+                name="heart"
+                size={20}
+                color={focused ? "white" : "gray"}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="me"
+          component={Me}
+          options={{
+            title: "Me",
+            headerShown: false,
+            tabBarIcon: ({ focused }) => (
+              <FontAwesome
+                name="user"
+                size={20}
+                color={focused ? "white" : "gray"}
+              />
+            ),
+          }}
+        />
+      </Tab.Navigator>
     </>
   );
 };

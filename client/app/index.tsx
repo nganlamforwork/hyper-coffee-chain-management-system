@@ -1,7 +1,14 @@
-import { Image, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
-import { router, Link } from "expo-router";
+import { router } from "expo-router";
 import { ROUTES } from "@/constants/route";
 
 const OnboardingScreen = () => {
@@ -9,37 +16,36 @@ const OnboardingScreen = () => {
     <>
       <StatusBar translucent barStyle="light-content" />
 
-      <View className="flex-1 flex-col">
-        <View className="h-3/5 bg-black">
+      <View style={styles.container}>
+        <View style={styles.imageContainer}>
           <Image
             source={require("../assets/images/onboard.png")}
             alt="Onboard"
+            style={styles.image}
           />
         </View>
 
         <LinearGradient
-          className="flex-1"
+          style={styles.linearGradient}
           colors={["#967259", "#38220F"]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
         >
-          <View className="flex-1 flex-col items-center gap-[50px] py-6">
-            <View className="w-full max-w-[60%] flex-col items-center justify-center space-y-4">
-              <Text className="font-semibold text-[34px] text-white text-center">
+          <View style={styles.contentContainer}>
+            <View style={styles.textContainer}>
+              <Text style={styles.mainText}>
                 Coffee so good, your taste buds will love it.
               </Text>
-              <Text className="text-[14px] text-[#A9A9A9] text-center">
+              <Text style={styles.subText}>
                 The best grain, the finest roast, the powerful flavor.
               </Text>
             </View>
 
             <TouchableOpacity
-              className="w-full max-w-[65%] bg-[#967259] py-4 rounded-2xl"
+              style={styles.button}
               onPress={() => router.replace(ROUTES.LOGIN)}
             >
-              <Text className="text-[16px] text-white text-center">
-                Get Started
-              </Text>
+              <Text style={styles.buttonText}>Get Started</Text>
             </TouchableOpacity>
           </View>
         </LinearGradient>
@@ -49,3 +55,62 @@ const OnboardingScreen = () => {
 };
 
 export default OnboardingScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "column",
+  },
+  imageContainer: {
+    height: "60%",
+    backgroundColor: "black",
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
+  },
+  linearGradient: {
+    flex: 1,
+  },
+  contentContainer: {
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "center",
+    gap: 50,
+    paddingVertical: 24,
+  },
+  textContainer: {
+    width: "100%",
+    maxWidth: "70%",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 16,
+  },
+  mainText: {
+    fontSize: 34,
+    fontWeight: "600",
+    color: "white",
+    textAlign: "center",
+  },
+  subText: {
+    fontSize: 14,
+    color: "#A9A9A9",
+    textAlign: "center",
+  },
+  button: {
+    position: "absolute",
+    bottom: 24,
+    left: 24,
+    right: 24,
+    backgroundColor: "#967259",
+    paddingVertical: 16,
+    borderRadius: 16,
+  },
+  buttonText: {
+    fontSize: 16,
+    color: "white",
+    textAlign: "center",
+  },
+});

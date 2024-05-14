@@ -1,8 +1,5 @@
-import { Platform, StatusBar, StyleSheet, View } from "react-native";
-import React, { useState } from "react";
-
-const OrderLayout = () => {
+const OrderNavigator = () => {
   return <></>;
 };
 
-export default OrderLayout;
+export default OrderNavigator;

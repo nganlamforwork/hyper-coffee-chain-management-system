@@ -1,22 +1,20 @@
-import { Image, StatusBar, Text, View } from 'react-native';
-import React from 'react';
-import { Slot } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Image, StatusBar, Text, View, StyleSheet } from "react-native";
+import React from "react";
+import { Slot } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const AuthLayout = () => {
   return (
     <>
       <StatusBar translucent barStyle="light-content" />
 
-      <View className="relative h-screen bg-[#ECE0D1]">
+      <View style={styles.container}>
         <Image
-          source={require('@/assets/images/auth-thumbnail.png')}
-          className="-translate-y-10 absolute"
+          source={require("@/assets/images/auth-thumbnail.png")}
+          style={styles.image}
         />
-        <SafeAreaView className="items-center">
-          <Text className="my-12 text-[36px] font-semibold text-center text-white">
-            Hyper Coffee
-          </Text>
+        <SafeAreaView style={styles.safeArea}>
+          <Text style={styles.title}>Hyper Coffee</Text>
           <Slot />
         </SafeAreaView>
       </View>
@@ -25,3 +23,25 @@ const AuthLayout = () => {
 };
 
 export default AuthLayout;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#ECE0D1",
+    position: "relative",
+  },
+  image: {
+    position: "absolute",
+    transform: [{ translateY: -40 }],
+  },
+  safeArea: {
+    alignItems: "center",
+  },
+  title: {
+    marginVertical: 48,
+    fontSize: 36,
+    fontWeight: "600",
+    textAlign: "center",
+    color: "white",
+  },
+});

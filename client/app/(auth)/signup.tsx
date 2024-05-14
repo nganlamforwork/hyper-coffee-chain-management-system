@@ -1,16 +1,22 @@
-import { Text, TextInput, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
-import { router } from 'expo-router';
-import { ROUTES } from '@/constants/route';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { axiosInstance } from '@/config/axios';
+import {
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+} from "react-native";
+import React, { useState } from "react";
+import { router } from "expo-router";
+import { ROUTES } from "@/constants/route";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { axiosInstance } from "@/config/axios";
 
 const Schema = z.object({
-  name: z.string({ message: 'Please enter your name' }),
-  email: z.string().describe('Email').email({ message: 'Invalid Email' }),
-  password: z.string().describe('Password').min(1, 'Password is required'),
+  name: z.string({ message: "Please enter your name" }),
+  email: z.string().describe("Email").email({ message: "Invalid Email" }),
+  password: z.string().describe("Password").min(1, "Password is required"),
 });
 
 const signup = () => {
@@ -20,10 +26,10 @@ const signup = () => {
     formState: { errors },
   } = useForm<z.infer<typeof Schema>>({
     resolver: zodResolver(Schema),
-    defaultValues: { name: '', email: '', password: '' },
+    defaultValues: { name: "", email: "", password: "" },
   });
 
-  const [resMessage, setResMessage] = useState<string>('');
+  const [resMessage, setResMessage] = useState<string>("");
 
   const onSubmit: SubmitHandler<z.infer<typeof Schema>> = async ({
     name,
@@ -31,7 +37,7 @@ const signup = () => {
     password,
   }) => {
     try {
-      const res = await axiosInstance.post('/registration', {
+      const res = await axiosInstance.post("/registration", {
         name,
         email,
         password,
@@ -42,27 +48,28 @@ const signup = () => {
         setResMessage(res?.data?.message);
       }
     } catch (error: any) {
-      console.error('Login failed:', error);
-      setResMessage('Please try again');
+      console.error("Login failed:", error);
+      setResMessage("Please try again");
     }
   };
 
   return (
-    <View className="w-[80%] bg-white rounded-[36px] p-[36px] flex-col items-center">
-      <View className="flex-row bg-[#ECE0D1] rounded-xl mb-[36px]">
+    <View style={styles.container}>
+      {/* TABS */}
+      <View style={styles.tabs}>
         <TouchableOpacity
-          className="w-[110px] px-4 py-2"
+          style={styles.inactiveTab}
           onPress={() => router.replace(ROUTES.LOGIN)}
         >
-          <Text className="text-center text-[14px] text-[#71727A]">Log In</Text>
+          <Text style={styles.inactiveTabText}>Log In</Text>
         </TouchableOpacity>
-        <TouchableOpacity className="w-[110px] bg-[#967259] px-4 py-2 rounded-xl">
-          <Text className="text-center text-[14px] text-white">Sign Up</Text>
+        <TouchableOpacity style={styles.activeTab}>
+          <Text style={styles.activeTabText}>Sign Up</Text>
         </TouchableOpacity>
       </View>
 
-      <View className="w-full">
-        <View className="mb-4">
+      <View style={styles.form}>
+        <View style={styles.formGroup}>
           <Controller
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
@@ -70,7 +77,7 @@ const signup = () => {
                 onChangeText={onChange}
                 onBlur={onBlur}
                 value={value}
-                className="mb-1 px-3 py-4 rounded-xl border border-[#C5C6CC]"
+                style={styles.input}
                 placeholder="Full name *"
               />
             )}
@@ -82,7 +89,7 @@ const signup = () => {
           )}
         </View>
 
-        <View className="mb-4">
+        <View style={styles.formGroup}>
           <Controller
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
@@ -90,19 +97,19 @@ const signup = () => {
                 onChangeText={onChange}
                 onBlur={onBlur}
                 value={value}
-                className="mb-1 px-3 py-4 rounded-xl border border-[#C5C6CC]"
-                placeholder="Email/Phone number *"
+                style={styles.input}
+                placeholder="Email *"
               />
             )}
             name="email" // Tên của trường
             defaultValue="" // Giá trị mặc định
           />
           {errors?.email?.message && (
-            <Text className="text-red-700">{errors.email.message}</Text>
+            <Text style={styles.errorText}>{errors.email.message}</Text>
           )}
         </View>
 
-        <View className="mb-4">
+        <View style={styles.formGroup}>
           <Controller
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
@@ -110,7 +117,7 @@ const signup = () => {
                 onChangeText={onChange}
                 onBlur={onBlur}
                 value={value}
-                className="mb-1 px-3 py-4 rounded-xl border border-[#C5C6CC]"
+                style={styles.input}
                 placeholder="Password *"
                 secureTextEntry
               />
@@ -119,27 +126,128 @@ const signup = () => {
             defaultValue="" // Giá trị mặc định
           />
           {errors?.password?.message && (
-            <Text className="text-red-700">{errors.password.message}</Text>
+            <Text style={styles.errorText}>{errors.password.message}</Text>
           )}
         </View>
       </View>
 
       {resMessage && (
-        <View className="w-full bg-red-100 py-2 rounded-md mb-4">
-          <Text className="text-red-700 text-center">{resMessage}</Text>
+        <View style={styles.messageContainer}>
+          <Text style={styles.messageText}>{resMessage}</Text>
         </View>
       )}
 
-      <View className="w-full">
-        <TouchableOpacity
-          className="w-full bg-[#967259] py-3 rounded-2xl"
-          onPress={handleSubmit(onSubmit)}
-        >
-          <Text className="text-[14px] text-white text-center">Sign Up</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        style={styles.loginButton}
+        onPress={handleSubmit(onSubmit)}
+      >
+        <Text style={styles.loginButtonText}>Sign Up</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
 export default signup;
+
+const styles = StyleSheet.create({
+  container: {
+    width: "80%",
+    backgroundColor: "white",
+    borderRadius: 36,
+    padding: 36,
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  tabs: {
+    flexDirection: "row",
+    backgroundColor: "#ECE0D1",
+    borderRadius: 10,
+    marginBottom: 36,
+  },
+  activeTab: {
+    width: 110,
+    backgroundColor: "#967259",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+  },
+  inactiveTab: {
+    width: 110,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+  },
+  activeTabText: {
+    textAlign: "center",
+    fontSize: 14,
+    color: "white",
+  },
+  inactiveTabText: {
+    textAlign: "center",
+    fontSize: 14,
+    color: "#71727A",
+  },
+  form: {
+    width: "100%",
+    marginBottom: 24,
+  },
+  formGroup: {
+    marginBottom: 16,
+  },
+  input: {
+    marginBottom: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 16,
+    borderRadius: 10,
+    borderColor: "#C5C6CC",
+    borderWidth: 1,
+  },
+  errorText: {
+    color: "red",
+  },
+  checkboxContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  checkbox: {
+    width: 16,
+    height: 16,
+    borderColor: "#967259",
+    borderRadius: 4,
+  },
+  checkboxLabel: {
+    marginLeft: 4,
+    fontSize: 12,
+    color: "#967259",
+  },
+  messageContainer: {
+    width: "100%",
+    backgroundColor: "#F8D7DA",
+    paddingVertical: 8,
+    borderRadius: 8,
+    marginBottom: 16,
+  },
+  messageText: {
+    color: "#721C24",
+    textAlign: "center",
+  },
+  loginButton: {
+    width: "100%",
+    backgroundColor: "#967259",
+    paddingVertical: 12,
+    borderRadius: 16,
+    marginBottom: 16,
+  },
+  loginButtonText: {
+    fontSize: 14,
+    color: "white",
+    textAlign: "center",
+  },
+  forgotPasswordContainer: {
+    width: "100%",
+    alignItems: "flex-end",
+  },
+  forgotPasswordText: {
+    fontSize: 14,
+    color: "#967259",
+  },
+});
