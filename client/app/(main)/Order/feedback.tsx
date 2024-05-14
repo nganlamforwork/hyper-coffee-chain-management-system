@@ -1,4 +1,6 @@
 import { axiosInstance } from "@/config/axios";
+import { Feather } from "@expo/vector-icons";
+import { Stack, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   View,
@@ -37,6 +39,14 @@ const Feedback: React.FC<FeedbackProps> = ({ navigation, route }) => {
   const [chosenImproveOptions, setChosenImproveOptions] = useState<
     Array<string>
   >([]);
+  const router = useRouter();
+  const goBack = () => {
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      console.log("No route to go back to");
+    }
+  };
   const sendFeedback = async () => {
     try {
       const feedbackData = {
@@ -75,121 +85,132 @@ const Feedback: React.FC<FeedbackProps> = ({ navigation, route }) => {
   };
 
   return (
-    <View style={styles.contentContainer}>
-      <Text
-        style={{
-          color: "#000",
-          fontSize: 24,
-          fontWeight: "bold",
-          textAlign: "center",
+    <>
+      <Stack.Screen
+        options={{
+          title: "Feedback Order",
+          headerTransparent: false,
+          headerTintColor: "black",
+          headerTitleStyle: {
+            fontSize: 20,
+            fontWeight: "bold",
+          },
+          headerStyle: {
+            backgroundColor: "#f8f9fe",
+          },
+          headerLeft: () => (
+            <TouchableOpacity onPress={goBack} style={{ marginLeft: 24 }}>
+              <Feather name="chevron-left" size={24} color="black" />
+            </TouchableOpacity>
+          ),
         }}
-      >
-        Feedback Order
-      </Text>
-      <View>
-        <Text style={{ fontSize: 18, fontWeight: "700" }}>
-          Your order is finised.
-        </Text>
-        <Text style={{ fontSize: 14, color: "#71727A" }}>
-          How would you rate the order?
-        </Text>
-        <AirbnbRating
-          // style={{ paddingVertical: 10 }}
-          showRating={false}
-          starImage={require("../../../assets/images/star.png")}
-          starContainerStyle={{ paddingTop: 10, alignSelf: "flex-start" }}
-          size={20}
-        />
-      </View>
-      <View>
-        <Text style={{ fontSize: 14, fontWeight: "700" }}>
-          What did you like about it?
-        </Text>
-        <View style={styles.optionContainer}>
-          {likeAboutOption.map((item, index) => (
-            <TouchableOpacity
-              key={index}
-              style={
-                chosenLikeAboutOptions.includes(item)
-                  ? styles.chooseOption
-                  : styles.unchooseOption
-              }
-              onPress={() => toggleLikeAboutOption(item)}
-            >
-              <Text
-                style={
-                  chosenLikeAboutOptions.includes(item)
-                    ? styles.chooseTextOption
-                    : styles.unchooseTextOption
-                }
-              >
-                {item}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
-
-      <View>
-        <Text style={{ fontSize: 14, fontWeight: "700" }}>
-          What could be improved?
-        </Text>
-        <View style={styles.optionContainer}>
-          {improveOption.map((item, index) => (
-            <TouchableOpacity
-              key={index}
-              style={
-                chosenImproveOptions.includes(item)
-                  ? styles.chooseOption
-                  : styles.unchooseOption
-              }
-              onPress={() => toggleImproveOption(item)}
-            >
-              <Text
-                style={
-                  chosenImproveOptions.includes(item)
-                    ? styles.chooseTextOption
-                    : styles.unchooseTextOption
-                }
-              >
-                {item}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
-
-      <View>
-        <Text style={{ fontSize: 14, fontWeight: "700", marginBottom: 10 }}>
-          Anything else?
-        </Text>
-        <View style={styles.cardStyle}>
-          <TextInput
-            multiline
-            numberOfLines={4}
-            placeholder="Add notes for shipper here"
-            style={{ height: 100, borderColor: "gray" }}
-            textAlignVertical="top" // Add this line
+      />
+      <View style={styles.contentContainer}>
+        <View>
+          <Text style={{ fontSize: 18, fontWeight: "700" }}>
+            Your order is finised.
+          </Text>
+          <Text style={{ fontSize: 14, color: "#71727A" }}>
+            How would you rate the order?
+          </Text>
+          <AirbnbRating
+            // style={{ paddingVertical: 10 }}
+            showRating={false}
+            starImage={require("../../../assets/images/star.png")}
+            starContainerStyle={{ paddingTop: 10, alignSelf: "flex-start" }}
+            size={20}
           />
         </View>
-      </View>
+        <View>
+          <Text style={{ fontSize: 14, fontWeight: "700" }}>
+            What did you like about it?
+          </Text>
+          <View style={styles.optionContainer}>
+            {likeAboutOption.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                style={
+                  chosenLikeAboutOptions.includes(item)
+                    ? styles.chooseOption
+                    : styles.unchooseOption
+                }
+                onPress={() => toggleLikeAboutOption(item)}
+              >
+                <Text
+                  style={
+                    chosenLikeAboutOptions.includes(item)
+                      ? styles.chooseTextOption
+                      : styles.unchooseTextOption
+                  }
+                >
+                  {item}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
 
-      <TouchableOpacity
-        style={styles.buttonSubmit}
-        onPress={() => sendFeedback()}
-      >
-        <Text
-          style={{
-            color: "white",
-            textAlign: "center",
-            fontWeight: "400",
-            fontSize: 16,
-          }}
+        <View>
+          <Text style={{ fontSize: 14, fontWeight: "700" }}>
+            What could be improved?
+          </Text>
+          <View style={styles.optionContainer}>
+            {improveOption.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                style={
+                  chosenImproveOptions.includes(item)
+                    ? styles.chooseOption
+                    : styles.unchooseOption
+                }
+                onPress={() => toggleImproveOption(item)}
+              >
+                <Text
+                  style={
+                    chosenImproveOptions.includes(item)
+                      ? styles.chooseTextOption
+                      : styles.unchooseTextOption
+                  }
+                >
+                  {item}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
+        <View>
+          <Text style={{ fontSize: 14, fontWeight: "700", marginBottom: 10 }}>
+            Anything else?
+          </Text>
+          <View style={styles.cardStyle}>
+            <TextInput
+              multiline
+              numberOfLines={4}
+              placeholder="Add notes for shipper here"
+              style={{ height: 100, borderColor: "gray" }}
+              textAlignVertical="top" // Add this line
+            />
+          </View>
+        </View>
+
+        <TouchableOpacity
+          style={styles.buttonSubmit}
+          onPress={() => sendFeedback()}
         >
-          Give Feedback
-        </Text>
-      </TouchableOpacity>
-    </View>
+          <Text
+            style={{
+              color: "white",
+              textAlign: "center",
+              fontWeight: "400",
+              fontSize: 16,
+            }}
+          >
+            Give Feedback
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </>
   );
 };
 
@@ -200,6 +221,7 @@ const styles = StyleSheet.create({
     padding: 30,
     flex: 1,
     gap: 10,
+    backgroundColor: "#f8f9fe",
   },
   buttonSubmit: {
     backgroundColor: "#967259",

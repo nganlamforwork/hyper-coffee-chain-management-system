@@ -1,17 +1,23 @@
-import { Text, TextInput, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
-import { router } from 'expo-router';
-import { ROUTES } from '@/constants/route';
-import Checkbox from 'expo-checkbox';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { axiosInstance } from '@/config/axios';
-import { useAuthStore } from '@/store/auth';
+import {
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+} from "react-native";
+import React, { useState } from "react";
+import { router } from "expo-router";
+import { ROUTES } from "@/constants/route";
+import Checkbox from "expo-checkbox";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { axiosInstance } from "@/config/axios";
+import { useAuthStore } from "@/store/auth";
 
 const LoginSchema = z.object({
-  email: z.string().describe('Email').email({ message: 'Invalid Email' }),
-  password: z.string().describe('Password').min(1, 'Password is required'),
+  email: z.string().describe("Email").email({ message: "Invalid Email" }),
+  password: z.string().describe("Password").min(1, "Password is required"),
 });
 
 const LoginScreen = () => {
@@ -21,17 +27,17 @@ const LoginScreen = () => {
     formState: { errors },
   } = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
-    defaultValues: { email: '', password: '' },
+    defaultValues: { email: "", password: "" },
   });
   const { setUser } = useAuthStore();
-  const [resMessage, setResMessage] = useState<string>('');
+  const [resMessage, setResMessage] = useState<string>("");
 
   const onLogin: SubmitHandler<z.infer<typeof LoginSchema>> = async ({
     email,
     password,
   }) => {
     try {
-      const res = await axiosInstance.post('/login', {
+      const res = await axiosInstance.post("/login", {
         email,
         password,
       });
@@ -46,30 +52,28 @@ const LoginScreen = () => {
         setResMessage(res?.data?.message);
       }
     } catch (error: any) {
-      console.error('Login failed:', error);
-      setResMessage('Please try again');
+      console.error("Login failed:", error);
+      setResMessage("Please try again");
     }
   };
 
   return (
-    <View className="w-[80%] bg-white rounded-[36px] p-[36px] flex-col items-center">
+    <View style={styles.container}>
       {/* TABS */}
-      <View className="flex-row bg-[#ECE0D1] rounded-xl mb-[36px]">
-        <TouchableOpacity className="w-[110px] bg-[#967259] px-4 py-2 rounded-xl">
-          <Text className="text-center text-[14px] text-white">Login</Text>
+      <View style={styles.tabs}>
+        <TouchableOpacity style={styles.activeTab}>
+          <Text style={styles.activeTabText}>Login</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          className="w-[110px] px-4 py-2"
+          style={styles.inactiveTab}
           onPress={() => router.replace(ROUTES.SIGNUP)}
         >
-          <Text className="text-center text-[14px] text-[#71727A]">
-            Sign Up
-          </Text>
+          <Text style={styles.inactiveTabText}>Sign Up</Text>
         </TouchableOpacity>
       </View>
 
-      <View className="w-full mb-[24px]">
-        <View className="mb-4">
+      <View style={styles.form}>
+        <View style={styles.formGroup}>
           <Controller
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
@@ -77,18 +81,18 @@ const LoginScreen = () => {
                 onChangeText={onChange}
                 onBlur={onBlur}
                 value={value}
-                className="mb-1 px-3 py-4 rounded-xl border border-[#C5C6CC]"
-                placeholder="Email/Phone number *"
+                style={styles.input}
+                placeholder="Email *"
               />
             )}
             name="email" // Tên của trường
             defaultValue="" // Giá trị mặc định
           />
           {errors?.email?.message && (
-            <Text className="text-red-700">{errors.email.message}</Text>
+            <Text style={styles.errorText}>{errors.email.message}</Text>
           )}
         </View>
-        <View className="mb-4">
+        <View style={styles.formGroup}>
           <Controller
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
@@ -96,7 +100,7 @@ const LoginScreen = () => {
                 onChangeText={onChange}
                 onBlur={onBlur}
                 value={value}
-                className="mb-1 px-3 py-4 rounded-xl border border-[#C5C6CC]"
+                style={styles.input}
                 placeholder="Password *"
                 secureTextEntry
               />
@@ -105,34 +109,30 @@ const LoginScreen = () => {
             defaultValue="" // Giá trị mặc định
           />
           {errors?.password?.message && (
-            <Text className="text-red-700">{errors.password.message}</Text>
+            <Text style={styles.errorText}>{errors.password.message}</Text>
           )}
         </View>
-        <View className="flex-row items-center">
-          <Checkbox className="w-4 h-4 border border-[#967259] rounded" />
-          <Text className="ml-1 text-[12px] text-[#967259]">
-            Sign me in automatically
-          </Text>
+        <View style={styles.checkboxContainer}>
+          <Checkbox style={styles.checkbox} />
+          <Text style={styles.checkboxLabel}>Sign me in automatically</Text>
         </View>
       </View>
 
       {resMessage && (
-        <View className="w-full bg-red-100 py-2 rounded-md mb-4">
-          <Text className="text-red-700 text-center">{resMessage}</Text>
+        <View style={styles.messageContainer}>
+          <Text style={styles.messageText}>{resMessage}</Text>
         </View>
       )}
 
       <TouchableOpacity
-        className="w-full bg-[#967259] py-3 rounded-2xl mb-4"
+        style={styles.loginButton}
         onPress={handleSubmit(onLogin)}
       >
-        <Text className="text-[14px] text-white text-center">Log In</Text>
+        <Text style={styles.loginButtonText}>Log In</Text>
       </TouchableOpacity>
-      <View className="w-full">
-        <TouchableOpacity className="ml-auto">
-          <Text className="text-[14px] text-[#967259]">
-            Forgot your password?
-          </Text>
+      <View style={styles.forgotPasswordContainer}>
+        <TouchableOpacity>
+          <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -140,3 +140,106 @@ const LoginScreen = () => {
 };
 
 export default LoginScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    width: "80%",
+    backgroundColor: "white",
+    borderRadius: 36,
+    padding: 36,
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  tabs: {
+    flexDirection: "row",
+    backgroundColor: "#ECE0D1",
+    borderRadius: 10,
+    marginBottom: 36,
+  },
+  activeTab: {
+    width: 110,
+    backgroundColor: "#967259",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+  },
+  inactiveTab: {
+    width: 110,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+  },
+  activeTabText: {
+    textAlign: "center",
+    fontSize: 14,
+    color: "white",
+  },
+  inactiveTabText: {
+    textAlign: "center",
+    fontSize: 14,
+    color: "#71727A",
+  },
+  form: {
+    width: "100%",
+    marginBottom: 24,
+  },
+  formGroup: {
+    marginBottom: 16,
+  },
+  input: {
+    marginBottom: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 16,
+    borderRadius: 10,
+    borderColor: "#C5C6CC",
+    borderWidth: 1,
+  },
+  errorText: {
+    color: "red",
+  },
+  checkboxContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  checkbox: {
+    width: 16,
+    height: 16,
+    borderColor: "#967259",
+    borderRadius: 4,
+  },
+  checkboxLabel: {
+    marginLeft: 4,
+    fontSize: 12,
+    color: "#967259",
+  },
+  messageContainer: {
+    width: "100%",
+    backgroundColor: "#F8D7DA",
+    paddingVertical: 8,
+    borderRadius: 8,
+    marginBottom: 16,
+  },
+  messageText: {
+    color: "#721C24",
+    textAlign: "center",
+  },
+  loginButton: {
+    width: "100%",
+    backgroundColor: "#967259",
+    paddingVertical: 12,
+    borderRadius: 16,
+    marginBottom: 16,
+  },
+  loginButtonText: {
+    fontSize: 14,
+    color: "white",
+    textAlign: "center",
+  },
+  forgotPasswordContainer: {
+    width: "100%",
+    alignItems: "flex-end",
+  },
+  forgotPasswordText: {
+    fontSize: 14,
+    color: "#967259",
+  },
+});

@@ -16,6 +16,7 @@ import { Category, Product } from "@/type";
 
 const Categories = () => {
   const [activeCategory, setActiveCategory] = useState("");
+
   const renderItem = ({ item }: { item: Product }) => {
     return (
       <View style={styles.itemContainer}>
@@ -38,33 +39,35 @@ const Categories = () => {
 
   return (
     <>
-      <View className="mx-6 flex-row justify-between mb-4">
-        <View className="w-[42px]"></View>
-        <Text className="font-bold text-[24px] text-[#1F2024]">Categories</Text>
-        <TouchableOpacity className="w-[42px] h-[42px] rounded-full bg-[#ECE0D180] bg-opacity-50 justify-center items-center">
+      <View style={styles.headerContainer}>
+        <View style={styles.placeholderBox} />
+        <Text style={styles.headerText}>Categories</Text>
+        <TouchableOpacity style={styles.searchButton}>
           <EvilIcons name="search" size={25} color="black" />
         </TouchableOpacity>
       </View>
 
-      <Text className="text-[#666666] ml-6 mb-4">Select a category</Text>
+      <Text style={styles.selectCategoryText}>Select a category</Text>
       <ScrollView
-        horizontal={true}
+        horizontal
         showsHorizontalScrollIndicator={false}
-        className="ml-6 mb-6 max-h-[36px]"
+        style={styles.categoryScroll}
       >
         {categories &&
           categories.map((item: Category) => (
             <TouchableOpacity
               key={item.id}
-              className={`justify-center items-center mr-2 px-4 py-2 rounded-full bg-[#ECE0D1] ${
-                activeCategory === item.id ? "bg-[#967259]" : ""
-              }`}
+              style={[
+                styles.categoryButton,
+                activeCategory === item.id && styles.activeCategoryButton,
+              ]}
               onPress={() => setActiveCategory(item.id)}
             >
               <Text
-                className={`text-[14px] text-[#2F3036] ${
-                  activeCategory === item.id ? "text-[#E8E9F1]" : ""
-                }`}
+                style={[
+                  styles.categoryButtonText,
+                  activeCategory === item.id && styles.activeCategoryButtonText,
+                ]}
               >
                 {item.name}
               </Text>
@@ -73,7 +76,7 @@ const Categories = () => {
       </ScrollView>
       <FlatList
         numColumns={2}
-        columnWrapperStyle={{ gap: 16, padding: 8 }}
+        columnWrapperStyle={styles.columnWrapper}
         contentContainerStyle={styles.flatListContainer}
         data={products}
         renderItem={renderItem}
@@ -86,9 +89,64 @@ const Categories = () => {
 export default Categories;
 
 const styles = StyleSheet.create({
+  headerContainer: {
+    marginHorizontal: 24,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 16,
+  },
+  placeholderBox: {
+    width: 42,
+  },
+  headerText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#1F2024",
+  },
+  searchButton: {
+    width: 42,
+    height: 42,
+    borderRadius: 21, // Full rounded
+    backgroundColor: "#ECE0D180",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  selectCategoryText: {
+    color: "#666666",
+    marginLeft: 24,
+    marginBottom: 16,
+  },
+  categoryScroll: {
+    marginLeft: 24,
+    marginBottom: 24,
+    maxHeight: 36,
+  },
+  categoryButton: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 9999, // Fully rounded
+    backgroundColor: "#ECE0D1",
+  },
+  activeCategoryButton: {
+    backgroundColor: "#967259",
+  },
+  categoryButtonText: {
+    fontSize: 14,
+    color: "#2F3036",
+  },
+  activeCategoryButtonText: {
+    color: "#E8E9F1",
+  },
   flatListContainer: {
     paddingHorizontal: 8,
     paddingBottom: 8,
+  },
+  columnWrapper: {
+    gap: 16,
+    padding: 8,
   },
   itemContainer: {
     flex: 1,

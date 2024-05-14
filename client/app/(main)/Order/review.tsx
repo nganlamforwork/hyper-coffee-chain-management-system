@@ -11,6 +11,8 @@ import RadioPayment from "@/components/PaymentComponent/RadioPayment";
 import { useOrderStore } from "@/store/order";
 import OrderCard from "@/components/OrderCard";
 import { axiosInstance } from "@/config/axios";
+import { Feather } from "@expo/vector-icons";
+import { Stack, useRouter } from "expo-router";
 
 const options = [
   {
@@ -32,6 +34,7 @@ const Review: React.FC<ReviewProps> = ({ navigation }) => {
   const [addressDetail, setAddressDetail] = useState("");
   const [orderId, setOrderId] = useState(null);
 
+  const router = useRouter();
   const createOrder = async () => {
     try {
       const orderData = {
@@ -66,11 +69,37 @@ const Review: React.FC<ReviewProps> = ({ navigation }) => {
     }
   };
 
+  const goBack = () => {
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      console.log("No route to go back to");
+    }
+  };
+
   return (
     <>
+      <Stack.Screen
+        options={{
+          title: "Review Order",
+          headerTransparent: false,
+          headerTintColor: "black",
+          headerTitleStyle: {
+            fontSize: 20,
+            fontWeight: "bold",
+          },
+          headerStyle: {
+            backgroundColor: "#f8f9fe",
+          },
+          headerLeft: () => (
+            <TouchableOpacity onPress={goBack} style={{ marginLeft: 24 }}>
+              <Feather name="chevron-left" size={24} color="black" />
+            </TouchableOpacity>
+          ),
+        }}
+      />
       <ScrollView style={styles.contentContainer}>
         <View style={styles.contentComponent}>
-          <Text style={styles.headerText}>Review Order</Text>
           <Text style={styles.title}>Address</Text>
           <View>
             <TextInput
